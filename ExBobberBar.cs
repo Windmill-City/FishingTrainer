@@ -11,10 +11,14 @@ using StardewValley.Menus;
 
 abstract class Shakeable
 {
+    public int ShakeMin = -10;
+    public int ShakeMax = 11;
+    public float ShakeSmoothFactor = 10f;
+
     public Vector2 Shake
     {
         get =>
-            new Vector2(Game1.random.Next(-10, 11), Game1.random.Next(-10, 11)) / 10f;
+            new Vector2(Game1.random.Next(ShakeMin, ShakeMax), Game1.random.Next(ShakeMin, ShakeMax)) / ShakeSmoothFactor;
     }
 }
 
@@ -222,10 +226,12 @@ class Bobber : Shakeable
 
 class BobberBar : Shakeable
 {
+    public const int BobberBarBaseHeight = 96;
+    public const int BobberBarIncPerLevel = 8;
     public const int PositionMax = 141 * 4;
     public const float Acceleration = 0.25f;
-    public int Height = 400;
-    private float _position = 0;
+    public int Height = BobberBarBaseHeight;
+    private float _position = PositionMax - BobberBarBaseHeight;
     public float Position
     {
         get => _position;
@@ -246,7 +252,6 @@ class BobberBar : Shakeable
 
     public void onTick()
     {
-
     }
 }
 
@@ -258,6 +263,13 @@ class Treasure : Shakeable
     public float catchProgress = 0;
     public float scale = 0;
     public float appearTimer = 0;
+
+    public Treasure()
+    {
+        ShakeMin = -2;
+        ShakeMax = 3;
+        ShakeSmoothFactor = 1;
+    }
 }
 
 class Fish
@@ -324,6 +336,7 @@ class ExBobberBar : IClickableMenu
 {
     public RootElement Ui;
     public bool hasBlessingOfWaters = false;
+    public int FishingLevel = 0;
     public Fish Fish = new Fish();
     public Catch Catch = new Catch();
     public Bobber Bobber = new Bobber();
