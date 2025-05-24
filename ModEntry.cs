@@ -1,8 +1,9 @@
 ﻿namespace FishingTrainer;
 
-using GenericModConfigMenu;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+
+using SpaceShared.APIs;
 
 public class ModEntry : Mod
 {
@@ -10,6 +11,7 @@ public class ModEntry : Mod
 
     public override void Entry(IModHelper helper)
     {
+        I18n.Init(helper.Translation);
         helper.Events.GameLoop.GameLaunched += OnGameLaunched;
     }
     private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
@@ -22,26 +24,6 @@ public class ModEntry : Mod
             mod: ModManifest,
             reset: () => Config = new ModConfig(),
             save: () => Helper.WriteConfig(Config)
-        );
-
-        configMenu.AddBoolOption(
-            mod: ModManifest,
-            name: () => "Example checkbox",
-            tooltip: () => "An optional description shown as a tooltip to the player.",
-            getValue: () => Config.ExampleBoolean,
-            setValue: value => Config.ExampleBoolean = value
-        );
-        configMenu.AddTextOption(
-            mod: ModManifest,
-            name: () => "Example string",
-            getValue: () => Config.ExampleString,
-            setValue: value => Config.ExampleString = value
-        );
-        configMenu.AddNumberOption(
-            mod: ModManifest,
-            name: () => "Example number",
-            getValue: () => Config.ExampleNumber,
-            setValue: value => Config.ExampleNumber = value
         );
     }
 }

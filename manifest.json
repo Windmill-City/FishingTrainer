@@ -1,9 +1,15 @@
 {
-  "Name": "FishingTrainer",
+  "Name": "Fishing Trainer",
   "Author": "Windmill_City",
   "Version": "1.0.0",
   "Description": "A mod to help enhance your fishing skill.",
   "UniqueID": "Windmill_City.FishingTrainer",
   "EntryDll": "FishingTrainer.dll",
-  "MinimumApiVersion": "4.0.0"
+  "MinimumApiVersion": "4.0.0",
+  "Dependencies": [
+    {
+      "UniqueID": "spacechase0.SpaceCore",
+      "MinimumVersion": "1.27.0"
+    }
+  ]
 }
