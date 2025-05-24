@@ -231,7 +231,7 @@ class BobberBar : Shakeable
     public const int PositionMax = 141 * 4;
     public const float Acceleration = 0.25f;
     public int Height = BobberBarBaseHeight;
-    private float _position = PositionMax - BobberBarBaseHeight;
+    private float _position;
     public float Position
     {
         get => _position;
@@ -250,6 +250,11 @@ class BobberBar : Shakeable
         }
     }
 
+    public BobberBar()
+    {
+        Position = PositionMax;
+    }
+
     public void onTick()
     {
     }
@@ -257,18 +262,30 @@ class BobberBar : Shakeable
 
 class Treasure : Shakeable
 {
-    public bool hasCaught = false;
-    public bool hasTreasure = true;
-    public float position = 0;
-    public float catchProgress = 0;
-    public float scale = 0;
+    public const int Height = 24 * 2;
+    public const int PositionMax = 141 * 4 - Height;
+    public const int PositionMin = 8;
+    public bool isHidden = false;
+    public bool isCaught = false;
+    public float CatchProgress = 1f;
     public float appearTimer = 0;
+    private float _position = 0;
+    public float Position
+    {
+        get => _position;
+        set
+        {
+            _position = Math.Clamp(value, PositionMin, PositionMax);
+        }
+    }
 
     public Treasure()
     {
         ShakeMin = -2;
         ShakeMax = 3;
         ShakeSmoothFactor = 1;
+
+        Position = PositionMax;
     }
 }
 
@@ -328,7 +345,7 @@ class Reel
 {
     public ICue? reelSound = null;
     public ICue? unReelSound = null;
-    public float reelRotation = 0;
+    public float ReelRotation = 0;
 }
 
 
@@ -338,8 +355,10 @@ class ExBobberBar : IClickableMenu
     public bool hasBlessingOfWaters = false;
     public int FishingLevel = 0;
     public Fish Fish = new Fish();
+    public Reel Reel = new Reel();
     public Catch Catch = new Catch();
     public Bobber Bobber = new Bobber();
+    public Treasure Treasure = new Treasure();
     public BobberBar BobberBar = new BobberBar();
     public bool BobberInBar
     {
@@ -352,6 +371,19 @@ class ExBobberBar : IClickableMenu
             float BobberBarBottom = BobberBar.Position + BobberBar.Height;
 
             return BobberBottom <= BobberBarBottom && BobberTop >= BobberBarTop;
+        }
+    }
+    public bool TreasureInBar
+    {
+        get
+        {
+            float TreasureTop = Treasure.Position;
+            float TreasureBottom = Treasure.Position + Treasure.Height;
+
+            float BobberBarTop = BobberBar.Position;
+            float BobberBarBottom = BobberBar.Position + BobberBar.Height;
+
+            return TreasureBottom <= BobberBarBottom && TreasureTop >= BobberBarTop;
         }
     }
     public SparklingText? PerfectText = null;
@@ -410,27 +442,51 @@ class ExBobberBar : IClickableMenu
         var X = (int)Ui.Position.X + 64;
         var Y = (int)Ui.Position.Y + 32;
 
+        // Position Bar LeftTop
+        var X_Bar = X + 17 * 4;
+        var Y_Bar = Y + 3 * 4;
+
         // Catch Progress
         b.Draw(Game1.staminaRect, new Rectangle(X + 32 * 4, Y + 2 * 4 + (int)(144 * 4 * (1f - Catch.CatchProgress)), 4 * 4, (int)(144 * 4 * Catch.CatchProgress)), Utility.getRedToGreenLerpColor(Catch.CatchProgress));
 
         //BobberBar
-        var BarShake = BobberInBar ? Vector2.Zero : BobberBar.Shake;
-        var BarColor = BobberInBar ? Color.White : (Color.White * 0.25f * ((float)Math.Round(Math.Sin(Game1.currentGameTime.TotalGameTime.TotalMilliseconds / 100.0), 2) + 2f));
-        b.Draw(Game1.mouseCursors, new Vector2(X + 17 * 4, Y + 3 * 4 + (int)BobberBar.Position) + BarShake, new Rectangle(682, 2078, 9, 2), BarColor, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.89f);
-        b.Draw(Game1.mouseCursors, new Vector2(X + 17 * 4, Y + 3 * 4 + (int)BobberBar.Position + 8) + BarShake, new Rectangle(682, 2081, 9, 1), BarColor, 0f, Vector2.Zero, new Vector2(4f, BobberBar.Height - 16), SpriteEffects.None, 0.89f);
-        b.Draw(Game1.mouseCursors, new Vector2(X + 17 * 4, Y + 3 * 4 + (int)BobberBar.Position + BobberBar.Height - 8) + BarShake, new Rectangle(682, 2085, 9, 2), BarColor, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.89f);
+        var BarShake = BobberInBar || TreasureInBar ? Vector2.Zero : BobberBar.Shake;
+        var BarColor = BobberInBar || TreasureInBar ? Color.White : (Color.White * 0.25f * ((float)Math.Round(Math.Sin(Game1.currentGameTime.TotalGameTime.TotalMilliseconds / 100.0), 2) + 2f));
+        b.Draw(Game1.mouseCursors, new Vector2(X_Bar, Y_Bar + (int)BobberBar.Position) + BarShake, new Rectangle(682, 2078, 9, 2), BarColor, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.89f);
+        b.Draw(Game1.mouseCursors, new Vector2(X_Bar, Y_Bar + (int)BobberBar.Position + 8) + BarShake, new Rectangle(682, 2081, 9, 1), BarColor, 0f, Vector2.Zero, new Vector2(4f, BobberBar.Height - 16), SpriteEffects.None, 0.89f);
+        b.Draw(Game1.mouseCursors, new Vector2(X_Bar, Y_Bar + (int)BobberBar.Position + BobberBar.Height - 8) + BarShake, new Rectangle(682, 2085, 9, 2), BarColor, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.89f);
         // BobberBar Top
-        b.Draw(Game1.staminaRect, new Rectangle(X + 17 * 4, Y + 3 * 4 + (int)BobberBar.Position, 4 * 9, 4), Color.GreenYellow);
+        b.Draw(Game1.staminaRect, new Rectangle(X_Bar, Y_Bar + (int)BobberBar.Position, 9 * 4, 4), Color.GreenYellow);
         // BobberBar Bottom
-        b.Draw(Game1.staminaRect, new Rectangle(X + 17 * 4, Y + 3 * 4 + (int)(BobberBar.Position + BobberBar.Height), 4 * 9, 4), Color.OrangeRed);
+        b.Draw(Game1.staminaRect, new Rectangle(X_Bar, Y_Bar + (int)(BobberBar.Position + BobberBar.Height), 9 * 4, 4), Color.OrangeRed);
 
         //Bobber
         var BobberShake = BobberInBar ? Bobber.Shake : Vector2.Zero;
-        b.Draw(Game1.mouseCursors, new Vector2(X + 17 * 4, Y + 3 * 4 + Bobber.Position) + BobberShake, new Rectangle(614, 1840, 20, 20), Color.White, 0f, Vector2.Zero, 2f, SpriteEffects.None, 0.88f);
+        b.Draw(Game1.mouseCursors, new Vector2(X_Bar, Y_Bar + Bobber.Position) + BobberShake, new Rectangle(614, 1840, 20, 20), Color.White, 0f, Vector2.Zero, 2f, SpriteEffects.None, 0.88f);
         // Bobber Top
-        b.Draw(Game1.staminaRect, new Rectangle(X + 17 * 4, Y + 3 * 4 + (int)Bobber.Position, 4 * 9, 4), Color.Green);
+        b.Draw(Game1.staminaRect, new Rectangle(X_Bar, Y_Bar + (int)Bobber.Position, 9 * 4, 4), Color.Green);
         // Bobber Bottom
-        b.Draw(Game1.staminaRect, new Rectangle(X + 17 * 4, Y + 3 * 4 + (int)(Bobber.Position + Bobber.Height), 4 * 9, 4), Color.Orange);
+        b.Draw(Game1.staminaRect, new Rectangle(X_Bar, Y_Bar + (int)(Bobber.Position + Bobber.Height), 9 * 4, 4), Color.Orange);
+
+        if (!Treasure.isHidden && !Treasure.isCaught)
+        {
+            // Treasure
+            var TreasureShake = TreasureInBar ? Treasure.Shake : Vector2.Zero;
+            b.Draw(Game1.mouseCursors, new Vector2(X_Bar, Y_Bar + Treasure.Position) + TreasureShake, new Rectangle(638, 1865, 20, 24), Color.White, 0f, new Vector2(2f, 0f), 2f, SpriteEffects.None, 0.85f);
+            // Treasure Top
+            b.Draw(Game1.staminaRect, new Rectangle(X_Bar, Y_Bar + (int)Treasure.Position, 9 * 4, 4), Color.Green);
+            // Treasure Bottom
+            b.Draw(Game1.staminaRect, new Rectangle(X_Bar, Y_Bar + (int)(Treasure.Position + Treasure.Height), 9 * 4, 4), Color.Orange);
+
+            if (Treasure.CatchProgress > 0f)
+            {
+                b.Draw(Game1.staminaRect, new Rectangle(X_Bar + 2, Y_Bar - 8 + (int)Treasure.Position, 8 * 4, 8), Color.DimGray * 0.5f);
+                b.Draw(Game1.staminaRect, new Rectangle(X_Bar + 2, Y_Bar - 8 + (int)Treasure.Position, (int)(Treasure.CatchProgress * 8 * 4), 8), Color.Orange);
+            }
+        }
+
+        // Reel
+        b.Draw(Game1.mouseCursors, new Vector2(X + 5 * 4, Y + 129 * 4), new Rectangle(257, 1990, 5, 10), Color.White, Reel.ReelRotation, new Vector2(2f, 10f), 4f, SpriteEffects.None, 0.9f);
 
         drawMouse(b);
 
