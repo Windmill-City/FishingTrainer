@@ -14,7 +14,7 @@ abstract class Shakeable
     public Vector2 Shake
     {
         get =>
-            new Vector2(Game1.random.Next(-2, 3), Game1.random.Next(-2, 3));
+            new Vector2(Game1.random.Next(-10, 11), Game1.random.Next(-10, 11)) / 10f;
     }
 }
 
@@ -401,7 +401,7 @@ class ExBobberBar : IClickableMenu
         b.Draw(Game1.staminaRect, new Rectangle(X + 32 * 4, Y + 2 * 4 + (int)(144 * 4 * (1f - Catch.CatchProgress)), 4 * 4, (int)(144 * 4 * Catch.CatchProgress)), Utility.getRedToGreenLerpColor(Catch.CatchProgress));
 
         //BobberBar
-        var BarShake = BobberInBar ? BobberBar.Shake : Vector2.Zero;
+        var BarShake = BobberInBar ? Vector2.Zero : BobberBar.Shake;
         var BarColor = BobberInBar ? Color.White : (Color.White * 0.25f * ((float)Math.Round(Math.Sin(Game1.currentGameTime.TotalGameTime.TotalMilliseconds / 100.0), 2) + 2f));
         b.Draw(Game1.mouseCursors, new Vector2(X + 17 * 4, Y + 3 * 4 + (int)BobberBar.Position) + BarShake, new Rectangle(682, 2078, 9, 2), BarColor, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.89f);
         b.Draw(Game1.mouseCursors, new Vector2(X + 17 * 4, Y + 3 * 4 + (int)BobberBar.Position + 8) + BarShake, new Rectangle(682, 2081, 9, 1), BarColor, 0f, Vector2.Zero, new Vector2(4f, BobberBar.Height - 16), SpriteEffects.None, 0.89f);
