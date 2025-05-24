@@ -467,7 +467,7 @@ class ExBobberBar : IClickableMenu
 
         //Bobber
         var BobberShake = BobberInBar ? Bobber.Shake : Vector2.Zero;
-        b.Draw(Game1.mouseCursors, new Vector2(X_Bar, Y_Bar + Bobber.Position) + BobberShake, new Rectangle(614, 1840, 20, 20), Color.White, 0f, new Vector2(2f, 0f), 2f, SpriteEffects.None, 0.88f);
+        b.Draw(Game1.mouseCursors, new Vector2(X_Bar, Y_Bar + Bobber.Position) + BobberShake, new Rectangle(614, 1840, 20, 20), Color.White, 0f, new Vector2(1f, 1f), 2f, SpriteEffects.None, 0.88f);
 
         if (showDebugHint)
         {
