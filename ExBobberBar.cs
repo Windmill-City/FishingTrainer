@@ -54,8 +54,8 @@ class FloaterSinker
 
 class Bobber : Shakeable
 {
-    public const float Height = 20;
-    public const int PositionMax = 548;
+    public const int Height = 20 * 2;
+    public const int PositionMax = 141 * 4 - Height;
     public const float PositionCloseMargin = 3f;
     public const float DartPositionMin = 50;
     public const float DartPositionMax = 100;
@@ -222,19 +222,18 @@ class Bobber : Shakeable
 
 class BobberBar : Shakeable
 {
-    public const int PositionMax = 568;
+    public const int PositionMax = 141 * 4;
     public const float Acceleration = 0.25f;
-    public int Height = 96;
+    public int Height = 400;
     private float _position = 0;
     public float Position
     {
         get => _position;
         set
         {
-            _position = Math.Clamp(value, 0, PositionMax);
+            _position = Math.Clamp(value, 0, PositionMax - Height);
         }
     }
-
     private float _velocity = 0;
     public float Velocity
     {
@@ -284,7 +283,6 @@ class Catch
     public const float ProgressIncPerTick = 0.002f;
     public int TrapBobberCount = 0;
     public bool isPerfect = true;
-    public float CatchProgress = 0.3f;
     public float ProgressDecPerTick
     {
         get
@@ -300,6 +298,15 @@ class Catch
                 default:
                     return 0.001f; // Reduction = 0.002f
             }
+        }
+    }
+    private float _catchProgress = 1f;
+    public float CatchProgress
+    {
+        get => _catchProgress;
+        set
+        {
+            _catchProgress = Math.Clamp(value, 0, 1);
         }
     }
 }
@@ -318,24 +325,25 @@ class ExBobberBar : IClickableMenu
     public RootElement Ui;
     public bool hasBlessingOfWaters = false;
     public Fish Fish = new Fish();
+    public Catch Catch = new Catch();
     public Bobber Bobber = new Bobber();
     public BobberBar BobberBar = new BobberBar();
     public bool BobberInBar
     {
         get
         {
-            float BobberTop = Bobber.Position + Bobber.Height;
-            float BobberBottom = Bobber.Position;
+            float BobberTop = Bobber.Position;
+            float BobberBottom = Bobber.Position + Bobber.Height;
 
-            float BobberBarTop = BobberBar.Position + BobberBar.Height;
-            float BobberBarBottom = BobberBar.Position;
+            float BobberBarTop = BobberBar.Position;
+            float BobberBarBottom = BobberBar.Position + BobberBar.Height;
 
-            return BobberBottom >= BobberBarBottom && BobberTop <= BobberBarTop;
+            return BobberBottom <= BobberBarBottom && BobberTop >= BobberBarTop;
         }
     }
     public SparklingText? PerfectText = null;
 
-    public ExBobberBar() : base(0, 0, 1280, 720)
+    public ExBobberBar() : base(0, 0, 320 * 4, 180 * 4)
     {
         Ui = new RootElement();
 
@@ -345,9 +353,18 @@ class ExBobberBar : IClickableMenu
         {
             Texture = Content.Load<Texture2D>("LooseSprites\\troutDerbyLetterBG"),
             TexturePixelArea = new Rectangle(0, 0, 320, 180),
-            Scale = 3,
+            Scale = 4,
         };
         Ui.AddChild(Background);
+
+        var BobberBarUi = new Image
+        {
+            Texture = Content.Load<Texture2D>("LooseSprites\\Cursors"),
+            TexturePixelArea = new Rectangle(644, 1999, 38, 150),
+            Scale = 4,
+            LocalPosition = new Vector2(64, 32),
+        };
+        Ui.AddChild(BobberBarUi);
 
         Reposition();
     }
@@ -359,7 +376,7 @@ class ExBobberBar : IClickableMenu
 
     private void Reposition()
     {
-        Ui.LocalPosition = new Vector2(Ui.Width - 320 * 3, Ui.Height - 180 * 3) / 2;
+        Ui.LocalPosition = new Vector2(Ui.Width - 320 * 4, Ui.Height - 180 * 4) / 2;
     }
 
     public override void update(GameTime time)
@@ -375,6 +392,32 @@ class ExBobberBar : IClickableMenu
         Game1.StartWorldDrawInUI(b);
 
         Ui.Draw(b);
+
+        // Position BobberBarUi
+        var X = (int)Ui.Position.X + 64;
+        var Y = (int)Ui.Position.Y + 32;
+
+        // Catch Progress
+        b.Draw(Game1.staminaRect, new Rectangle(X + 32 * 4, Y + 2 * 4 + (int)(144 * 4 * (1f - Catch.CatchProgress)), 4 * 4, (int)(144 * 4 * Catch.CatchProgress)), Utility.getRedToGreenLerpColor(Catch.CatchProgress));
+
+        //BobberBar
+        var BarShake = BobberInBar ? BobberBar.Shake : Vector2.Zero;
+        var BarColor = BobberInBar ? Color.White : (Color.White * 0.25f * ((float)Math.Round(Math.Sin(Game1.currentGameTime.TotalGameTime.TotalMilliseconds / 100.0), 2) + 2f));
+        b.Draw(Game1.mouseCursors, new Vector2(X + 17 * 4, Y + 3 * 4 + (int)BobberBar.Position) + BarShake, new Rectangle(682, 2078, 9, 2), BarColor, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.89f);
+        b.Draw(Game1.mouseCursors, new Vector2(X + 17 * 4, Y + 3 * 4 + (int)BobberBar.Position + 8) + BarShake, new Rectangle(682, 2081, 9, 1), BarColor, 0f, Vector2.Zero, new Vector2(4f, BobberBar.Height - 16), SpriteEffects.None, 0.89f);
+        b.Draw(Game1.mouseCursors, new Vector2(X + 17 * 4, Y + 3 * 4 + (int)BobberBar.Position + BobberBar.Height - 8) + BarShake, new Rectangle(682, 2085, 9, 2), BarColor, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.89f);
+        // BobberBar Top
+        b.Draw(Game1.staminaRect, new Rectangle(X + 17 * 4, Y + 3 * 4 + (int)BobberBar.Position, 4 * 9, 4), Color.GreenYellow);
+        // BobberBar Bottom
+        b.Draw(Game1.staminaRect, new Rectangle(X + 17 * 4, Y + 3 * 4 + (int)(BobberBar.Position + BobberBar.Height), 4 * 9, 4), Color.OrangeRed);
+
+        //Bobber
+        var BobberShake = BobberInBar ? Bobber.Shake : Vector2.Zero;
+        b.Draw(Game1.mouseCursors, new Vector2(X + 17 * 4, Y + 3 * 4 + Bobber.Position) + BobberShake, new Rectangle(614, 1840, 20, 20), Color.White, 0f, Vector2.Zero, 2f, SpriteEffects.None, 0.88f);
+        // Bobber Top
+        b.Draw(Game1.staminaRect, new Rectangle(X + 17 * 4, Y + 3 * 4 + (int)Bobber.Position, 4 * 9, 4), Color.Green);
+        // Bobber Bottom
+        b.Draw(Game1.staminaRect, new Rectangle(X + 17 * 4, Y + 3 * 4 + (int)(Bobber.Position + Bobber.Height), 4 * 9, 4), Color.Orange);
 
         drawMouse(b);
 
