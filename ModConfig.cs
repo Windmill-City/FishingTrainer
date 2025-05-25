@@ -12,7 +12,7 @@ public sealed class ModConfig
 
     public int FishingLevel = 10;
 
-    public bool hasTreasure = true;
+    public bool hasTreasure = false;
     public bool hasDeluxeBait = false;
     public bool hasTreasureHunter = false;
     public bool hasBlessingOfWaters = false;
