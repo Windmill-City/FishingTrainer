@@ -176,7 +176,7 @@ class Bobber
     public void Reset()
     {
         isSlidingOrStill = true;
-        Position = PositionMax - Height / 2;
+        Position = PositionMax - Height;
         Velocity = Acceleration = 0;
     }
 
