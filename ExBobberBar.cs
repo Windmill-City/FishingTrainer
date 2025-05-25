@@ -123,7 +123,6 @@ class Bobber
     public const float DartPositionMax = 100;
     public const float VelocitySmoothingFactor = 5f;
     public MotionType motionType = MotionType.Smooth;
-    public float difficulty = 30;
     public bool isSlidingOrStill = true;
     public float Velocity = 0;
     public float Acceleration = 0;
@@ -137,9 +136,9 @@ class Bobber
         get
         {
             if (motionType == MotionType.Smooth)
-                return difficulty * 20 / 4000f;
+                return Difficulty * 20 / 4000f;
             else// Mixed/Dart/Floater/Sinker
-                return difficulty / 4000f;
+                return Difficulty / 4000f;
         }
     }
     public double ChanceDart
@@ -149,7 +148,7 @@ class Bobber
             if (motionType == MotionType.Smooth)
                 return 0;
             else// Mixed/Dart/Floater/Sinker
-                return difficulty / 2000f;
+                return Difficulty / 2000f;
         }
     }
     public double ChanceQuickDart
@@ -157,7 +156,7 @@ class Bobber
         get
         {
             if (motionType == MotionType.Mixed)
-                return difficulty / 1000f;
+                return Difficulty / 1000f;
             else// Smooth/Dart/Floater/Sinker
                 return 0;
         }
@@ -192,7 +191,7 @@ class Bobber
             // 10% ~ 45%
             float randomScale = Game1.random.Next(10, 45);
             // 10% ~ 99%
-            float deltaScale = Math.Min(randomScale + difficulty, 99f) / 100f;
+            float deltaScale = Math.Min(randomScale + Difficulty, 99f) / 100f;
             // Move to top or bottom
             float deltaPosition = Game1.random.Next((int)-spaceAbove, (int)spaceBottom);
 
@@ -211,7 +210,7 @@ class Bobber
         get
             => Position
             + (Game1.random.NextBool() ? -1 : 1)
-            * Game1.random.Next((int)DartPositionMin, (int)DartPositionMax + (int)difficulty * 2);
+            * Game1.random.Next((int)DartPositionMin, (int)DartPositionMax + (int)Difficulty * 2);
     }
     public float RandomAcceleration
     {
@@ -221,7 +220,7 @@ class Bobber
 
             float reduction;
             reduction = Game1.random.Next(10, 30);
-            reduction += Math.Max(0, 100 - difficulty);
+            reduction += Math.Max(0, 100 - Difficulty);
 
             return force / reduction;
         }
@@ -237,6 +236,15 @@ class Bobber
     {
         get => _position;
         set => _position = Math.Clamp(value, 0, PositionMax);
+    }
+    private float _difficulty = 30;
+    public float Difficulty
+    {
+        get
+        {
+            return Context.hasBlessingOfWaters ? _difficulty / 2 : _difficulty;
+        }
+        set => _difficulty = value;
     }
 
     public Bobber(ExBobberBar Bar)
@@ -364,7 +372,18 @@ class BobberBar
         Context.BarbedHook.onTick();
 
         Velocity += Acceleration;
+
+        var oldBobberInBar = Context.BobberInBar;
+
         Position += Velocity;
+
+        // Just leave
+        if (oldBobberInBar
+            && !Context.BobberInBar
+            && !(Context.hasTreasureHunter && Context.TreasureInBar))
+        {
+            Game1.playSound("tinyWhip");
+        }
 
         if (JustHitTop || JustHitBottom)
         {
@@ -481,15 +500,52 @@ class Fish
     public const int TimePerFishSizeReduction = 800;
     public ExBobberBar Context;
     public Item? fishObject = null;
-    public int quality = 0;
-    public int size = 0;
+    public int Quality = 0;
     public int minSize = 0;
     public int maxSize = 0;
-    public int fishSizeReductionTimer = TimePerFishSizeReduction;
+    public int fishSizeReductionTimer;
+    private int _size = 0;
+    public int Size
+    {
+        get => _size;
+        set
+        {
+            _size = Math.Clamp(value, minSize, maxSize);
+        }
+    }
+
+    public void Reset()
+    {
+        fishSizeReductionTimer = TimePerFishSizeReduction;
+
+        var RandomSizeBase = Game1.random.NextDouble();
+
+        Size = (int)(minSize + (maxSize - minSize) * RandomSizeBase) + 1;
+        Quality = (!(RandomSizeBase < 0.33)) ? (RandomSizeBase < 0.66 ? 1 : 2) : 0;
+    }
 
     public Fish(ExBobberBar Bar)
     {
         Context = Bar;
+        Reset();
+    }
+
+    public void onTick()
+    {
+        if (Context.BobberInBar) return;
+        if (Context.hasTreasureHunter && Context.TreasureInBar) return;
+
+        if (fishSizeReductionTimer > 0)
+        {
+            fishSizeReductionTimer--;
+            if (fishSizeReductionTimer == 0)
+            {
+                Size -= 1;
+                fishSizeReductionTimer = TimePerFishSizeReduction;
+            }
+        }
+
+        Context.isPerfect = false;
     }
 }
 
@@ -498,19 +554,27 @@ class ChallengeBait
     public const int ChallengeFishMax = 3;
     public ExBobberBar Context;
     public bool hasChallengeBait = false;
-    private int challengeFish;
-    public int ChallengeFish
+    public int ChallengeFish;
+
+    public void Reset()
     {
-        get => challengeFish;
-        set
-        {
-            challengeFish = Math.Clamp(value, 0, ChallengeFishMax);
-        }
+        ChallengeFish = ChallengeFishMax;
     }
 
     public ChallengeBait(ExBobberBar Bar)
     {
         Context = Bar;
+        Reset();
+    }
+
+    public void onTick()
+    {
+        if (!hasChallengeBait && ChallengeFish > 0) return;
+
+        if (Context.BobberInBar) return;
+        if (Context.hasTreasureHunter && Context.TreasureInBar) return;
+
+        ChallengeFish -= 1;
     }
 }
 
@@ -518,7 +582,6 @@ class Catch
 {
     public ExBobberBar Context;
     public float ProgressIncPerTick = 0.002f;
-    public float ProgressDecPerTick = -0.003f;
     public bool isCaught = false;
     private float _catchProgress;
     public float CatchProgress
@@ -526,12 +589,33 @@ class Catch
         get => _catchProgress;
         set
         {
+            var oldCatchProgress = _catchProgress;
             _catchProgress = Math.Clamp(value, 0, 1);
+            // Just Zero
+            if (_catchProgress == 0 && oldCatchProgress > 0)
+            {
+                Game1.playSound("fishEscape");
+            }
+        }
+    }
+    public float ProgressDecPerTick
+    {
+        get
+        {
+            var decreasePerTick = 0.003f;
+            var trapBobberReduction = 0.001f;
+            for (int i = 0; i < Context.TrapBobber; i++)
+            {
+                decreasePerTick -= trapBobberReduction;
+                trapBobberReduction /= 2;
+            }
+            return -Math.Max(0.001f, decreasePerTick);
         }
     }
 
     public void Reset()
     {
+        isCaught = false;
         CatchProgress = 0.3f;
     }
 
@@ -549,6 +633,7 @@ class Catch
             if (CatchProgress == 1)
             {
                 isCaught = true;
+                Game1.playSound("jingle1");
             }
         }
     }
@@ -603,7 +688,11 @@ class Reel
 
 class ExBobberBar : IClickableMenu
 {
+    public const int TimeToPauseOnNoAction = 60 * 3;
     public RootElement Ui;
+    public bool hasPaused = true;
+    public int PauseTimer = TimeToPauseOnNoAction;
+    public bool hasTreasureHunter = false;
     public int TrapBobber = 0;
     public int CorkBobber = 0;
     public int LeadBobber = 0;
@@ -646,6 +735,8 @@ class ExBobberBar : IClickableMenu
     {
         get
         {
+            if (Treasure.isHidden || Treasure.isCaught) return false;
+
             float TreasureTop = Treasure.Position;
             float TreasureBottom = Treasure.Position + Treasure.Height;
 
@@ -696,6 +787,11 @@ class ExBobberBar : IClickableMenu
 
     private void BeforeExitMenu(IClickableMenu menu)
     {
+        StopSound();
+    }
+
+    private void StopSound()
+    {
         Reel.ReelSound?.Stop(AudioStopOptions.Immediate);
         Reel.UnReelSound?.Stop(AudioStopOptions.Immediate);
     }
@@ -714,11 +810,50 @@ class ExBobberBar : IClickableMenu
     {
         Ui.Update();
 
+        if (!isPressed)
+        {
+            if (PauseTimer > 0)
+            {
+                PauseTimer--;
+            }
+            else
+            {
+                hasPaused = true;
+                StopSound();
+            }
+        }
+        else
+        {
+            hasPaused = false;
+            PauseTimer = TimeToPauseOnNoAction;
+        }
+
+        if (hasPaused) return;
+
         Bobber.onTick();
         BobberBar.onTick();
+
         Treasure.onTick();
-        Reel.onTick();
+
         Catch.onTick();
+        Fish.onTick();
+        ChallengeBait.onTick();
+
+        Reel.onTick();
+
+        if (Catch.isCaught)
+        {
+            Bobber.Reset();
+            BobberBar.Reset();
+
+            Treasure.Reset();
+
+            Catch.Reset();
+            Fish.Reset();
+            ChallengeBait.Reset();
+
+
+        }
     }
 
     public override void draw(SpriteBatch b)
@@ -741,7 +876,6 @@ class ExBobberBar : IClickableMenu
         // Bar LeftTop
         var X_BL = X + 17 * 4;
         var Y_BT = Y + 3 * 4;
-
 
         //BobberBar
         var BarShake = BobberInBar || TreasureInBar ? Vector2.Zero : BobberBar.Shaker.Shake;
