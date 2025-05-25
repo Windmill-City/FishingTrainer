@@ -623,7 +623,7 @@ class Catch
     public void Reset()
     {
         isCaught = false;
-        CatchProgress = 0.1f;
+        CatchProgress = 0.3f;
     }
 
     public Catch(ExBobberBar Bar)
