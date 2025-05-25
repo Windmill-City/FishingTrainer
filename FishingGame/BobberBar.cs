@@ -15,9 +15,6 @@ class BobberBar
     public float Velocity;
     public float Acceleration;
 
-    public bool JustHitTop;
-    public bool JustHitBottom;
-
     public bool AtTop => Position == 0;
     public bool AtBottom => Position == PositionMax - Height;
 
@@ -27,11 +24,7 @@ class BobberBar
         get => _position;
         set
         {
-            var prvPosition = _position;
             _position = Math.Clamp(value, 0, PositionMax - Height);
-
-            JustHitTop = AtTop && prvPosition - _position > 0;
-            JustHitBottom = AtBottom && prvPosition - _position < 0;
         }
     }
 
@@ -60,7 +53,6 @@ class BobberBar
     {
         Velocity = Acceleration = 0;
         _position = PositionMax - Height;
-        JustHitBottom = JustHitTop = false;
     }
 
     public void onTick()
@@ -82,23 +74,27 @@ class BobberBar
 
         Velocity += Acceleration;
 
+        var prvPosition = Position;
         var prvInBar = Context.BobberInBar || Context.TreasureInBar;
 
         Position += Velocity;
 
-        // Just leave
+        // just leave
         if (prvInBar && !(Context.BobberInBar || Context.TreasureInBar))
         {
             Game1.playSound("tinyWhip");
         }
 
-        if (JustHitTop || JustHitBottom)
+        var justHitTop = AtTop && prvPosition - _position > 0;
+        var justHitBottom = AtBottom && prvPosition - _position < 0;
+
+        if (justHitTop || justHitBottom)
         {
             Velocity = -Velocity * 2f / 3f;
             Game1.playSound("shiny4");
         }
 
-        if (JustHitBottom && ModEntry.Config.LeadBobber > 0)
+        if (justHitBottom && ModEntry.Config.LeadBobber > 0)
         {
             Velocity *= ModEntry.Config.LeadBobber * 0.1f;
         }

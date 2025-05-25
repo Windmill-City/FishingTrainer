@@ -1,5 +1,6 @@
 using FishingTrainer;
 using StardewValley;
+using StardewValley.Characters;
 
 class Catch
 {
@@ -15,13 +16,7 @@ class Catch
         get => _catchProgress;
         set
         {
-            var oldCatchProgress = _catchProgress;
             _catchProgress = Math.Clamp(value, 0, 1);
-            // Just Zero
-            if (_catchProgress == 0 && oldCatchProgress > 0)
-            {
-                Game1.playSound("fishEscape");
-            }
         }
     }
 
@@ -64,7 +59,16 @@ class Catch
 
     public void onTick()
     {
+        var prvCatchProgress = CatchProgress;
+
         CatchProgress += Context.BobberInBar ? ProgressIncPerTick : ProgressDecPerTick;
+
+        // Just Zero
+        if (CatchProgress == 0 && prvCatchProgress > 0)
+        {
+            Game1.playSound("fishEscape");
+        }
+
         if (CatchProgress == 1)
         {
             // minor reset - for better experience in non-full reset mode
