@@ -135,7 +135,7 @@ class Bobber
         set => _targetPosition = Math.Clamp(value, 0, PositionMax);
     }
 
-    private float _position = PositionMax;
+    private float _position;
     public float Position
     {
         get => _position;
@@ -170,12 +170,13 @@ class Bobber
     public Bobber(FishingGame Bar)
     {
         Context = Bar;
+        Reset();
     }
 
     public void Reset()
     {
         isSlidingOrStill = true;
-        Position = PositionMax;
+        Position = PositionMax - Height;
         Velocity = Acceleration = 0;
     }
 
