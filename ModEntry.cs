@@ -70,6 +70,14 @@ public class ModEntry : Mod
             setValue: value => Config.ResetFishingGame = value
         );
 
+        configMenu.AddBoolOption(
+            mod: ModManifest,
+            name: () => I18n.Config_ResetOnCaught(),
+            tooltip: () => I18n.Config_ResetOnCaught_ToolTip(),
+            getValue: () => Config.ResetOnCaught,
+            setValue: value => Config.ResetOnCaught = value
+        );
+
         configMenu.AddNumberOption(
             mod: ModManifest,
             name: () => I18n.Config_TimeToPauseNoAction(),

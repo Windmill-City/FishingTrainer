@@ -64,14 +64,15 @@ class Catch
 
     public void onTick()
     {
-        if (!isCaught)
+        CatchProgress += Context.BobberInBar ? ProgressIncPerTick : ProgressDecPerTick;
+        if (CatchProgress == 1)
         {
-            CatchProgress += Context.BobberInBar ? ProgressIncPerTick : ProgressDecPerTick;
-            if (CatchProgress == 1)
-            {
-                isCaught = true;
-                Game1.playSound("jingle1");
-            }
+            // minor reset - for better experience in non-full reset mode
+            CatchProgress = 0.3f;
+            Context.isPerfect = true;
+
+            isCaught = true;
+            Game1.playSound("jingle1");
         }
     }
 }

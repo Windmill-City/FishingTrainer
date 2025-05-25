@@ -1,9 +1,12 @@
 {
   "Config.OpenFishingGame": "打开钓鱼练习器",
-  "Config.OpenFishingGame.ToolTip": "钓鱼小游戏模拟器",
+  "Config.OpenFishingGame.ToolTip": "钓鱼小游戏练习器",
 
   "Config.ResetFishingGame": "复位钓鱼练习器",
   "Config.ResetFishingGame.ToolTip": "复位钓鱼练习器状态",
+
+  "Config.ResetOnCaught": "在捕捉到之后复位",
+  "Config.ResetOnCaught.ToolTip": "在捕获条满之后复位练习器状态",
 
   "Config.TimeToPauseNoAction": "暂停计时器",
   "Config.TimeToPauseNoAction.ToolTip": "无操作时自动暂停的时间 (秒) (0 表示禁用此功能)",
@@ -33,7 +36,6 @@
 
   "Config.BarbedHook": "倒刺钩",
   "Config.BarbedHook.ToolTip": "倒刺钩个数",
-
 
   "ExBobberBar.Paused": "已暂停",
   "ExBobberBar.Running": "运行中",

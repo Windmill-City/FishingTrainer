@@ -157,7 +157,7 @@ class FishingGame : IClickableMenu
         Catch.onTick();
         Treasure.onTick();
 
-        if (Catch.isCaught) Reset();
+        if (Catch.isCaught && ModEntry.Config.ResetOnCaught) Reset();
     }
 
     public void onTick()
