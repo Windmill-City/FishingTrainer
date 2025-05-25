@@ -20,7 +20,7 @@
   "Config.hasTreasureHunter": "hasTreasureHunter?",
   "Config.hasTreasureHunter.ToolTip": "Keep progress bar when collecting treasure.",
   "Config.hasBlessingOfWaters": "hasBlessingOfWaters?",
-  "Config.hasBlessingOfWaters.ToolTip": "Difficulty -50% & progress bar drop speed -50%",
+  "Config.hasBlessingOfWaters.ToolTip": "Difficulty -50%(BossFish -25%) & progress bar drop speed -50%",
 
   "Config.TrapBobber": "Trap Bobber",
   "Config.TrapBobber.ToolTip": "Trap Bobber Count",

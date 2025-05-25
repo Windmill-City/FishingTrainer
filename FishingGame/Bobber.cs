@@ -142,14 +142,29 @@ class Bobber
         set => _position = Math.Clamp(value, 0, PositionMax);
     }
 
-    private float _difficulty = 30;
     public float Difficulty
     {
         get
         {
-            return ModEntry.Config.hasBlessingOfWaters ? _difficulty / 2 : _difficulty;
+            if (ModEntry.Config.hasBlessingOfWaters)
+            {
+                bool bossFish;
+                Context.Fish.Content.fishObject.TryGetTempData("IsBossFish", out bossFish);
+
+                if (bossFish)
+                {
+                    return Context.Fish.Content.difficulty * 0.75f;
+                }
+                else
+                {
+                    return Context.Fish.Content.difficulty * 0.5f;
+                }
+            }
+            else
+            {
+                return Context.Fish.Content.difficulty;
+            }
         }
-        set => _difficulty = value;
     }
 
     public Bobber(FishingGame Bar)

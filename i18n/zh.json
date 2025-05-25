@@ -20,7 +20,7 @@
   "Config.hasTreasureHunter": "是否有寻宝者?",
   "Config.hasTreasureHunter.ToolTip": "收集宝藏时捕获条不下降",
   "Config.hasBlessingOfWaters": "是否有水之祝福?",
-  "Config.hasBlessingOfWaters.ToolTip": "难度 -50% & 捕获条下降速率 -50%",
+  "Config.hasBlessingOfWaters.ToolTip": "难度 -50%(鱼王 -25%) & 捕获条下降速率 -50%",
 
   "Config.TrapBobber": "陷阱浮标",
   "Config.TrapBobber.ToolTip": "陷阱浮标个数",
