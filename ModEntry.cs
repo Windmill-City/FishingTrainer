@@ -159,5 +159,27 @@ public class ModEntry : Mod
             getValue: () => Config.BarbedHook,
             setValue: value => Config.BarbedHook = value
         );
+
+        configMenu.AddBoolOption(
+            mod: ModManifest,
+            name: () => I18n.Config_ReelSound(),
+            tooltip: null,
+            getValue: () => Config.ReelSound,
+            setValue: value => Config.ReelSound = value
+        );
+        configMenu.AddBoolOption(
+            mod: ModManifest,
+            name: () => I18n.Config_CaughtSound(),
+            tooltip: null,
+            getValue: () => Config.CaughtSound,
+            setValue: value => Config.CaughtSound = value
+        );
+        configMenu.AddBoolOption(
+            mod: ModManifest,
+            name: () => I18n.Config_EscapeSound(),
+            tooltip: null,
+            getValue: () => Config.EscapeSound,
+            setValue: value => Config.EscapeSound = value
+        );
     }
 }

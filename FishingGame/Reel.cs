@@ -1,3 +1,4 @@
+using FishingTrainer;
 using Microsoft.Xna.Framework.Audio;
 using StardewValley;
 
@@ -19,7 +20,8 @@ class Reel
     {
         if (Context.isPressed && !hasBend)
         {
-            Game1.playSound("fishingRodBend");
+            if (ModEntry.Config.ReelSound)
+                Game1.playSound("fishingRodBend");
         }
         hasBend = Context.isPressed;
 
@@ -29,7 +31,8 @@ class Reel
             UnReelSound?.Stop(AudioStopOptions.Immediate);
             if (ReelSound == null || ReelSound.IsStopped || ReelSound.IsStopping || !ReelSound.IsPlaying)
             {
-                Game1.playSound("fastReel", out ReelSound);
+                if (ModEntry.Config.ReelSound)
+                    Game1.playSound("fastReel", out ReelSound);
             }
         }
         else
@@ -40,7 +43,8 @@ class Reel
             ReelSound?.Stop(AudioStopOptions.Immediate);
             if (UnReelSound == null || UnReelSound.IsStopped)
             {
-                Game1.playSound("slowReel", 600, out UnReelSound);
+                if (ModEntry.Config.ReelSound)
+                    Game1.playSound("slowReel", 600, out UnReelSound);
             }
         }
     }

@@ -21,4 +21,8 @@ public sealed class ModConfig
     public int CorkBobber = 0;
     public int LeadBobber = 0;
     public int BarbedHook = 0;
+
+    public bool ReelSound = false;
+    public bool CaughtSound = false;
+    public bool EscapeSound = false;
 }

@@ -66,7 +66,8 @@ class Catch
         // Just Zero
         if (CatchProgress == 0 && prvCatchProgress > 0)
         {
-            Game1.playSound("fishEscape");
+            if (ModEntry.Config.EscapeSound)
+                Game1.playSound("fishEscape");
         }
 
         if (CatchProgress == 1)
@@ -76,7 +77,9 @@ class Catch
             Context.isPerfect = true;
 
             isCaught = true;
-            Game1.playSound("jingle1");
+
+            if (ModEntry.Config.CaughtSound)
+                Game1.playSound("jingle1");
         }
     }
 }

@@ -37,6 +37,10 @@
   "Config.BarbedHook": "倒刺钩",
   "Config.BarbedHook.ToolTip": "倒刺钩个数",
 
+  "Config.ReelSound": "线轮音效",
+  "Config.CaughtSound": "捕获音效",
+  "Config.EscapeSound": "逃走音效",
+
   "ExBobberBar.Paused": "已暂停",
   "ExBobberBar.Running": "运行中",
 

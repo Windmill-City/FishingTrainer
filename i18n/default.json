@@ -37,6 +37,10 @@
   "Config.BarbedHook": "Barbed Hook",
   "Config.BarbedHook.ToolTip": "Barbed Hook Count",
 
+  "Config.ReelSound": "Reel Sound",
+  "Config.CaughtSound": "Caught Sound",
+  "Config.EscapeSound": "Escape Sound",
+
   "ExBobberBar.Paused": "Paused",
   "ExBobberBar.Running": "Running",
 
