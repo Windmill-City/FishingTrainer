@@ -1,5 +1,6 @@
 using FishingTrainer;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SpaceCore.UI;
@@ -48,22 +49,22 @@ class BarbedHook
     public const float AccelerationExtra = 0.05f;
     public int Count = 0;
 
-    public void onTick(BobberBar bar)
+    public void onTick(ExBobberBar Bar)
     {
-        if (bar.BobberInBar)
+        if (Bar.BobberInBar)
         {
             for (int i = 0; i < Count; i++)
             {
                 var acceleration = i > 0 ? AccelerationExtra : AccelerationBase;
 
-                var midBar = bar.Position + bar.Height / 2;
-                var midBobber = bar.Bobber.Position + Bobber.Height / 2;
+                var midBar = Bar.BobberBar.Position + Bar.BobberBar.Height / 2;
+                var midBobber = Bar.Bobber.Position + Bobber.Height / 2;
                 // is bobber over the bar?
-                bar.Velocity += midBobber < midBar ? -acceleration : acceleration;
+                Bar.BobberBar.Velocity += midBobber < midBar ? -acceleration : acceleration;
 
                 // bar acceleration modifer
                 var modifier = i > 0 ? AccModifierExtra : AccelerationBase;
-                bar.Acceleration *= modifier;
+                Bar.BobberBar.Acceleration *= modifier;
             }
         }
     }
@@ -288,9 +289,6 @@ class BobberBar
     public const float AccelerationBase = 0.25f;
     public bool JustHitTop = false;
     public bool JustHitBottom = false;
-    public int LeadBobber = 0;
-    public BarbedHook BarbedHook = new BarbedHook();
-    public Bobber Bobber = new Bobber();
     public int Height = BobberBarBaseHeight;
     public float Acceleration = 0f;
     private float _position;
@@ -317,19 +315,6 @@ class BobberBar
             _velocity = value;
         }
     }
-    public bool BobberInBar
-    {
-        get
-        {
-            float BobberTop = Bobber.Position;
-            float BobberBottom = Bobber.Position + Bobber.Height;
-
-            float BobberBarTop = Position;
-            float BobberBarBottom = Position + Height;
-
-            return BobberBottom <= BobberBarBottom && BobberTop >= BobberBarTop;
-        }
-    }
 
     public BobberBar()
     {
@@ -338,30 +323,28 @@ class BobberBar
 
     public void Reset()
     {
-        Bobber.Reset();
         Velocity = Acceleration = 0;
         _position = PositionMax - Height;
         JustHitBottom = JustHitTop = false;
     }
 
-    public void onTick(bool isPressed)
+    public void onTick(ExBobberBar Bar)
     {
-        Bobber.onTick();
 
-        Acceleration = isPressed ? -AccelerationBase : AccelerationBase;
+        Acceleration = Bar.isPressed ? -AccelerationBase : AccelerationBase;
 
         // if key pressed when bobber bar at top/bottom, then zero its velocity
-        if (isPressed && (AtTop || AtBottom))
+        if (Bar.isPressed && (AtTop || AtBottom))
         {
             Velocity = 0;
         }
 
-        if (BobberInBar)
+        if (Bar.BobberInBar)
         {
             Acceleration *= 0.5f;
         }
 
-        BarbedHook.onTick(this);
+        Bar.BarbedHook.onTick(Bar);
 
         Velocity += Acceleration;
         Position += Velocity;
@@ -372,9 +355,9 @@ class BobberBar
             Game1.playSound("shiny4");
         }
 
-        if (JustHitBottom && LeadBobber > 0)
+        if (JustHitBottom && Bar.LeadBobber > 0)
         {
-            Velocity *= LeadBobber * 0.1f;
+            Velocity *= Bar.LeadBobber * 0.1f;
         }
     }
 }
@@ -385,11 +368,13 @@ class Treasure
     public const int Height = 24 * 2;
     public const int PositionMax = 141 * 4 - Height;
     public const int PositionMin = 8;
-    public bool isHidden = false;
-    public bool isCaught = false;
-    public float CatchProgress = 0.3f;
-    public float appearTimer = 0;
-    private float _position = 0;
+    public float ProgressIncPerTick = 0.0135f;
+    public float ProgressDecPerTick = -0.01f;
+    public bool isExist = true;
+    public bool isHidden;
+    public bool isCaught;
+    public float AppearTimer;
+    private float _position;
     public float Position
     {
         get => _position;
@@ -398,10 +383,75 @@ class Treasure
             _position = Math.Clamp(value, PositionMin, PositionMax);
         }
     }
+    public int RandomAppearTime => Game1.random.Next(60, 60 * 3);
+    private float _catchProgress;
+    public float CatchProgress
+    {
+        get => _catchProgress;
+        set
+        {
+            _catchProgress = Math.Clamp(value, 0, 1);
+        }
+    }
+
+    public float RandomPosition(BobberBar Bar)
+    {
+        if (Bar.Position > BobberBar.PositionMax / 2)
+        {
+            // generate above the bar
+            return Game1.random.Next(PositionMin, (int)(Bar.Position - Height));
+        }
+        else
+        {
+            // generate below the bar
+            return Game1.random.Next((int)(Bar.Position + Bar.Height), PositionMax);
+        }
+    }
+
+
+    public void Reset()
+    {
+        isHidden = true;
+        isCaught = false;
+        CatchProgress = 0;
+        AppearTimer = RandomAppearTime;
+    }
 
     public Treasure()
     {
-        Position = PositionMax;
+        Reset();
+    }
+
+    public void onTick(ExBobberBar Bar)
+    {
+        if (isExist)
+        {
+            if (isHidden)
+            {
+                if (AppearTimer > 0)
+                {
+                    AppearTimer--;
+                }
+                else
+                {
+                    Position = RandomPosition(Bar.BobberBar);
+                    isHidden = false;
+                    Game1.playSound("dwop");
+                }
+            }
+            else
+            {
+                if (!isCaught)
+                {
+                    CatchProgress += Bar.TreasureInBar ? ProgressIncPerTick : ProgressDecPerTick;
+                    if (CatchProgress == 1)
+                    {
+                        isCaught = true;
+                        Game1.playSound("newArtifact");
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -434,8 +484,9 @@ class ChallengeBait
 class Catch
 {
     public float ProgressIncPerTick = 0.002f;
-    public float ProgressDecPerTick = 0.003f;
-    private float _catchProgress = 1f;
+    public float ProgressDecPerTick = -0.003f;
+    public bool isCaught = false;
+    private float _catchProgress;
     public float CatchProgress
     {
         get => _catchProgress;
@@ -444,23 +495,66 @@ class Catch
             _catchProgress = Math.Clamp(value, 0, 1);
         }
     }
+
+    public void Reset()
+    {
+        CatchProgress = 0.3f;
+    }
+
+    public Catch()
+    {
+        Reset();
+    }
+
+    public void onTick(ExBobberBar Bar)
+    {
+        if (!isCaught)
+        {
+            CatchProgress += Bar.BobberInBar ? ProgressIncPerTick : ProgressDecPerTick;
+            if (CatchProgress == 1)
+            {
+                isCaught = true;
+            }
+        }
+    }
 }
 
 
 class Reel
 {
-    public ICue? reelSound = null;
-    public ICue? unReelSound = null;
+    public ICue? ReelSound = null;
+    public ICue? UnReelSound = null;
     public float ReelRotation = 0;
     public bool isButtonPressed = false;
     public bool hasBend = false;
-    public void onTick(bool isPressed)
+    public void onTick(ExBobberBar Bar)
     {
-        if (isPressed && !hasBend)
+        if (Bar.isPressed && !hasBend)
         {
             Game1.playSound("fishingRodBend");
         }
-        hasBend = isPressed;
+        hasBend = Bar.isPressed;
+
+        if (Bar.BobberInBar)
+        {
+            ReelRotation += (float)(Math.PI / 8f);
+            UnReelSound?.Stop(AudioStopOptions.Immediate);
+            if (ReelSound == null || ReelSound.IsStopped || ReelSound.IsStopping || !ReelSound.IsPlaying)
+            {
+                Game1.playSound("fastReel", out ReelSound);
+            }
+        }
+        else
+        {
+            var BobberBar = Bar.BobberBar;
+            var len = Math.Abs(Bar.Bobber.Position - (BobberBar.Position + BobberBar.Height / 2));
+            ReelRotation -= (float)Math.PI / Math.Max(10f, 200f - len);
+            ReelSound?.Stop(AudioStopOptions.Immediate);
+            if (UnReelSound == null || UnReelSound.IsStopped)
+            {
+                Game1.playSound("slowReel", 600, out UnReelSound);
+            }
+        }
     }
 }
 
@@ -468,8 +562,10 @@ class Reel
 class ExBobberBar : IClickableMenu
 {
     public RootElement Ui;
-    public int TrapBobberCount = 0;
-    public int CorkBobberCount = 0;
+    public int TrapBobber = 0;
+    public int CorkBobber = 0;
+    public int LeadBobber = 0;
+    public BarbedHook BarbedHook = new BarbedHook();
     public bool isPerfect = true;
     public bool showDebugHint = true;
     public bool hasBlessingOfWaters = false;
@@ -477,8 +573,9 @@ class ExBobberBar : IClickableMenu
     public Fish Fish = new Fish();
     public Reel Reel = new Reel();
     public Catch Catch = new Catch();
+    public Bobber Bobber = new Bobber();
+    public BobberBar BobberBar = new BobberBar();
     public Treasure Treasure = new Treasure();
-    public BobberBar Bar = new BobberBar();
     public bool isPressed =>
         Game1.oldMouseState.LeftButton == ButtonState.Pressed
         || Game1.isOneOfTheseKeysDown(Game1.oldKBState, Game1.options.useToolButton)
@@ -489,7 +586,19 @@ class ExBobberBar : IClickableMenu
                 || Game1.oldPadState.IsButtonDown(Buttons.A)
             )
         );
+    public bool BobberInBar
+    {
+        get
+        {
+            float BobberTop = Bobber.Position;
+            float BobberBottom = Bobber.Position + Bobber.Height;
 
+            float BobberBarTop = BobberBar.Position;
+            float BobberBarBottom = BobberBar.Position + BobberBar.Height;
+
+            return BobberBottom <= BobberBarBottom && BobberTop >= BobberBarTop;
+        }
+    }
     public bool TreasureInBar
     {
         get
@@ -497,8 +606,8 @@ class ExBobberBar : IClickableMenu
             float TreasureTop = Treasure.Position;
             float TreasureBottom = Treasure.Position + Treasure.Height;
 
-            float BobberBarTop = Bar.Position;
-            float BobberBarBottom = Bar.Position + Bar.Height;
+            float BobberBarTop = BobberBar.Position;
+            float BobberBarBottom = BobberBar.Position + BobberBar.Height;
 
             return TreasureBottom <= BobberBarBottom && TreasureTop >= BobberBarTop;
         }
@@ -507,6 +616,8 @@ class ExBobberBar : IClickableMenu
 
     public ExBobberBar() : base(0, 0, 320 * 4, 180 * 4)
     {
+        behaviorBeforeCleanup += BeforeExitMenu;
+
         Ui = new RootElement();
 
         var Content = ModEntry.Instance!.Helper.GameContent;
@@ -531,6 +642,12 @@ class ExBobberBar : IClickableMenu
         Reposition();
     }
 
+    private void BeforeExitMenu(IClickableMenu menu)
+    {
+        Reel.ReelSound?.Stop(AudioStopOptions.Immediate);
+        Reel.UnReelSound?.Stop(AudioStopOptions.Immediate);
+    }
+
     public override void gameWindowSizeChanged(Rectangle oldBounds, Rectangle newBounds)
     {
         Reposition();
@@ -545,8 +662,11 @@ class ExBobberBar : IClickableMenu
     {
         Ui.Update();
 
-        Bar.onTick(isPressed);
-        Reel.onTick(isPressed);
+        Bobber.onTick();
+        BobberBar.onTick(this);
+        Treasure.onTick(this);
+        Reel.onTick(this);
+        Catch.onTick(this);
     }
 
     public override void draw(SpriteBatch b)
@@ -570,31 +690,32 @@ class ExBobberBar : IClickableMenu
         var X_BL = X + 17 * 4;
         var Y_BT = Y + 3 * 4;
 
+
         //BobberBar
-        var BarShake = Bar.BobberInBar || TreasureInBar ? Vector2.Zero : BobberBar.Shaker.Shake;
-        var BarColor = Bar.BobberInBar || TreasureInBar ? Color.White : (Color.White * 0.25f * ((float)Math.Round(Math.Sin(Game1.currentGameTime.TotalGameTime.TotalMilliseconds / 100.0), 2) + 2f));
-        b.Draw(Game1.mouseCursors, new Vector2(X_BL, Y_BT + (int)Bar.Position) + BarShake, new Rectangle(682, 2078, 9, 2), BarColor, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.89f);
-        b.Draw(Game1.mouseCursors, new Vector2(X_BL, Y_BT + (int)Bar.Position + 8) + BarShake, new Rectangle(682, 2081, 9, 1), BarColor, 0f, Vector2.Zero, new Vector2(4f, Bar.Height - 16), SpriteEffects.None, 0.89f);
-        b.Draw(Game1.mouseCursors, new Vector2(X_BL, Y_BT + (int)Bar.Position + Bar.Height - 8) + BarShake, new Rectangle(682, 2085, 9, 2), BarColor, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.89f);
+        var BarShake = BobberInBar || TreasureInBar ? Vector2.Zero : BobberBar.Shaker.Shake;
+        var BarColor = BobberInBar || TreasureInBar ? Color.White : (Color.White * 0.25f * ((float)Math.Round(Math.Sin(Game1.currentGameTime.TotalGameTime.TotalMilliseconds / 100.0), 2) + 2f));
+        b.Draw(Game1.mouseCursors, new Vector2(X_BL, Y_BT + (int)BobberBar.Position) + BarShake, new Rectangle(682, 2078, 9, 2), BarColor, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.89f);
+        b.Draw(Game1.mouseCursors, new Vector2(X_BL, Y_BT + (int)BobberBar.Position + 8) + BarShake, new Rectangle(682, 2081, 9, 1), BarColor, 0f, Vector2.Zero, new Vector2(4f, BobberBar.Height - 16), SpriteEffects.None, 0.89f);
+        b.Draw(Game1.mouseCursors, new Vector2(X_BL, Y_BT + (int)BobberBar.Position + BobberBar.Height - 8) + BarShake, new Rectangle(682, 2085, 9, 2), BarColor, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.89f);
 
         if (showDebugHint)
         {
             // BobberBar Top
-            b.Draw(Game1.staminaRect, new Rectangle(X_BL, Y_BT + (int)Bar.Position, 9 * 4, 4), Color.Red);
+            b.Draw(Game1.staminaRect, new Rectangle(X_BL, Y_BT + (int)BobberBar.Position, 9 * 4, 4), Color.Red);
             // BobberBar Bottom
-            b.Draw(Game1.staminaRect, new Rectangle(X_BL, Y_BT - 4 + (int)(Bar.Position + Bar.Height), 9 * 4, 4), Color.White);
+            b.Draw(Game1.staminaRect, new Rectangle(X_BL, Y_BT - 4 + (int)(BobberBar.Position + BobberBar.Height), 9 * 4, 4), Color.White);
         }
 
         //Bobber
-        var BobberShake = Bar.BobberInBar ? Bobber.Shaker.Shake : Vector2.Zero;
-        b.Draw(Game1.mouseCursors, new Vector2(X_BL, Y_BT + Bar.Bobber.Position) + BobberShake, new Rectangle(614, 1840, 20, 20), Color.White, 0f, new Vector2(1f, 1f), 2f, SpriteEffects.None, 0.88f);
+        var BobberShake = BobberInBar ? Bobber.Shaker.Shake : Vector2.Zero;
+        b.Draw(Game1.mouseCursors, new Vector2(X_BL, Y_BT + Bobber.Position) + BobberShake, new Rectangle(614, 1840, 20, 20), Color.White, 0f, new Vector2(1f, 1f), 2f, SpriteEffects.None, 0.88f);
 
         if (showDebugHint)
         {
             // Bobber Top
-            b.Draw(Game1.staminaRect, new Rectangle(X_BL, Y_BT + (int)Bar.Bobber.Position, 9 * 4, 4), Color.Red);
+            b.Draw(Game1.staminaRect, new Rectangle(X_BL, Y_BT + (int)Bobber.Position, 9 * 4, 4), Color.Red);
             // Bobber Bottom
-            b.Draw(Game1.staminaRect, new Rectangle(X_BL, Y_BT - 4 + (int)(Bar.Bobber.Position + Bobber.Height), 9 * 4, 4), Color.White);
+            b.Draw(Game1.staminaRect, new Rectangle(X_BL, Y_BT - 4 + (int)(Bobber.Position + Bobber.Height), 9 * 4, 4), Color.White);
         }
 
         if (!Treasure.isHidden && !Treasure.isCaught)
@@ -619,7 +740,7 @@ class ExBobberBar : IClickableMenu
         }
 
         // Reel
-        b.Draw(Game1.mouseCursors, new Vector2(X + 5 * 4, Y + 129 * 4), new Rectangle(257, 1990, 5, 10), Color.White, Reel.ReelRotation, new Vector2(2f, 10f), 4f, SpriteEffects.None, 0.9f);
+        b.Draw(Game1.mouseCursors, new Vector2(X + 5.5f * 4, Y + 128.5f * 4), new Rectangle(257, 1990, 5, 10), Color.White, Reel.ReelRotation, new Vector2(2.5f, 9.5f), 4f, SpriteEffects.None, 0.9f);
 
         drawMouse(b);
 

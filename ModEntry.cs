@@ -31,7 +31,7 @@ public class ModEntry : Mod
             {
                 if (Game1.activeClickableMenu is ExBobberBar)
                 {
-                    Game1.activeClickableMenu = null;
+                    Game1.activeClickableMenu.exitThisMenu();
                 }
             }
         }
