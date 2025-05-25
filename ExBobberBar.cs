@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SpaceCore.UI;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Extensions;
@@ -514,7 +515,7 @@ class Fish
 {
     public const int TimePerFishSizeReduction = 800;
     public ExBobberBar Context;
-    public FishData? fish = null;
+    public FishData fish;
     public int fishSizeReductionTimer;
     private int _size = 0;
     public int Size
@@ -522,7 +523,7 @@ class Fish
         get => _size;
         set
         {
-            _size = Math.Clamp(value, fish!.minSize, fish!.maxSize);
+            _size = Math.Clamp(value, fish.minSize, fish.maxSize);
         }
     }
 
@@ -532,8 +533,8 @@ class Fish
 
         var RandomSizeBase = Game1.random.NextDouble();
 
-        Size = (int)(fish!.minSize + (fish!.maxSize - fish!.minSize) * RandomSizeBase) + 1;
-        fish!.fishObject!.Quality = (!(RandomSizeBase < 0.33)) ? (RandomSizeBase < 0.66 ? 1 : 2) : 0;
+        Size = (int)(fish.minSize + (fish.maxSize - fish.minSize) * RandomSizeBase) + 1;
+        fish.fishObject!.Quality = (!(RandomSizeBase < 0.33)) ? (RandomSizeBase < 0.66 ? 1 : 2) : 0;
     }
 
     public Fish(ExBobberBar Bar)
@@ -703,13 +704,11 @@ class Reel
     }
 }
 
-
-
-
 class ExBobberBar : IClickableMenu
 {
     public int TimeToPauseOnNoAction = 60 * 3;
     public RootElement Ui;
+    public Image BobberBarUi;
     public bool AutoPaused = true;
     public bool ForcePaused = false;
     public int PauseTimer = 0;
@@ -730,16 +729,31 @@ class ExBobberBar : IClickableMenu
     public BobberBar BobberBar;
     public Treasure Treasure;
     public ChallengeBait ChallengeBait;
-    public bool isPressed =>
-        Game1.oldMouseState.LeftButton == ButtonState.Pressed
-        || Game1.isOneOfTheseKeysDown(Game1.oldKBState, Game1.options.useToolButton)
-        ||
-        (
-            Game1.options.gamepadControls
-                && (Game1.oldPadState.IsButtonDown(Buttons.X)
-                || Game1.oldPadState.IsButtonDown(Buttons.A)
-            )
-        );
+    public bool isPressed
+    {
+        get
+        {
+            var Input = ModEntry.Instance!.Helper.Input;
+
+            if (Input.GetState(SButton.MouseLeft) == SButtonState.Held)
+            {
+                return BobberBarUi.Hover;
+            }
+
+            if (Game1.isOneOfTheseKeysDown(Game1.oldKBState, Game1.options.useToolButton))
+            {
+                return true;
+            }
+
+            if (Game1.options.gamepadControls
+                && (Game1.oldPadState.IsButtonDown(Buttons.X) || Game1.oldPadState.IsButtonDown(Buttons.A)))
+            {
+                return true;
+            }
+
+            return false;
+        }
+    }
     public bool BobberInBar
     {
         get
@@ -797,7 +811,7 @@ class ExBobberBar : IClickableMenu
         };
         Ui.AddChild(Background);
 
-        var BobberBarUi = new Image
+        BobberBarUi = new Image
         {
             Texture = Content.Load<Texture2D>("LooseSprites\\Cursors"),
             TexturePixelArea = new Rectangle(644, 1999, 38, 150),
