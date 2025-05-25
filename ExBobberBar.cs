@@ -37,7 +37,7 @@ enum MotionType
     Mixed,
     Dart,
     Smooth,
-    Sink,
+    Sinker,
     Floater,
 }
 
@@ -99,7 +99,7 @@ class FloaterSinker
     {
         switch (motionType)
         {
-            case MotionType.Sink:
+            case MotionType.Sinker:
                 Acceleration += AccelerationPerTick;
                 break;
             case MotionType.Floater:
@@ -514,10 +514,7 @@ class Fish
 {
     public const int TimePerFishSizeReduction = 800;
     public ExBobberBar Context;
-    public Item? fishObject = null;
-    public int Quality = 0;
-    public int minSize = 0;
-    public int maxSize = 0;
+    public FishData? fish = null;
     public int fishSizeReductionTimer;
     private int _size = 0;
     public int Size
@@ -525,7 +522,7 @@ class Fish
         get => _size;
         set
         {
-            _size = Math.Clamp(value, minSize, maxSize);
+            _size = Math.Clamp(value, fish!.minSize, fish!.maxSize);
         }
     }
 
@@ -535,14 +532,13 @@ class Fish
 
         var RandomSizeBase = Game1.random.NextDouble();
 
-        Size = (int)(minSize + (maxSize - minSize) * RandomSizeBase) + 1;
-        Quality = (!(RandomSizeBase < 0.33)) ? (RandomSizeBase < 0.66 ? 1 : 2) : 0;
+        Size = (int)(fish!.minSize + (fish!.maxSize - fish!.minSize) * RandomSizeBase) + 1;
+        fish!.fishObject!.Quality = (!(RandomSizeBase < 0.33)) ? (RandomSizeBase < 0.66 ? 1 : 2) : 0;
     }
 
     public Fish(ExBobberBar Bar)
     {
         Context = Bar;
-        Reset();
     }
 
     public void onTick()
@@ -708,6 +704,8 @@ class Reel
 }
 
 
+
+
 class ExBobberBar : IClickableMenu
 {
     public int TimeToPauseOnNoAction = 60 * 3;
@@ -785,6 +783,8 @@ class ExBobberBar : IClickableMenu
 
         behaviorBeforeCleanup += BeforeExitMenu;
 
+        Game1.displayHUD = false;
+
         Ui = new RootElement();
 
         var Content = ModEntry.Instance!.Helper.GameContent;
@@ -812,6 +812,7 @@ class ExBobberBar : IClickableMenu
     private void BeforeExitMenu(IClickableMenu menu)
     {
         StopSound();
+        Game1.displayHUD = true;
     }
 
     private void StopSound()
@@ -867,15 +868,20 @@ class ExBobberBar : IClickableMenu
 
         if (Catch.isCaught)
         {
-            Bobber.Reset();
-            BobberBar.Reset();
-
-            Treasure.Reset();
-
-            Catch.Reset();
-            Fish.Reset();
-            ChallengeBait.Reset();
+            Reset();
         }
+    }
+
+    public void Reset()
+    {
+        Bobber.Reset();
+        BobberBar.Reset();
+
+        Treasure.Reset();
+
+        Catch.Reset();
+        Fish.Reset();
+        ChallengeBait.Reset();
     }
 
     public override void draw(SpriteBatch b)
