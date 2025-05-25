@@ -313,7 +313,6 @@ class BobberBar
     public const float AccelerationBase = 0.25f;
     public bool JustHitTop = false;
     public bool JustHitBottom = false;
-    public int Height = BobberBarBaseHeight;
     public float Acceleration = 0f;
     private float _position;
     public bool AtTop => _position == 0;
@@ -337,6 +336,22 @@ class BobberBar
         set
         {
             _velocity = value;
+        }
+    }
+
+    public int Height
+    {
+        get
+        {
+            var height = BobberBarBaseHeight;
+
+            // Cork Bobber
+            height += Context.CorkBobber * 24;
+
+            // Deluxe Bait
+            height += Context.hasDeluxeBait ? 12 : 0;
+
+            return height;
         }
     }
 
@@ -700,6 +715,7 @@ class ExBobberBar : IClickableMenu
     public bool AutoPaused = true;
     public bool ForcePaused = false;
     public int PauseTimer = 0;
+    public bool hasDeluxeBait = false;
     public bool hasTreasureHunter = false;
     public int TrapBobber = 0;
     public int CorkBobber = 0;
