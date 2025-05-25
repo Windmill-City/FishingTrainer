@@ -138,7 +138,7 @@ class FishingGame : IClickableMenu
     private void Reposition()
     {
         xPositionOnScreen = (int)((Game1.viewport.Width - width * Game1.options.uiScale) / 2);
-        yPositionOnScreen = (int)((Game1.viewport.Height - height*Game1.options.uiScale) / 2);
+        yPositionOnScreen = (int)((Game1.viewport.Height - height * Game1.options.uiScale) / 2);
     }
 
     public override void update(GameTime time)
