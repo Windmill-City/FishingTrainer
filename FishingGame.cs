@@ -196,6 +196,7 @@ class FishingGame : IClickableMenu
 
     public void Reset()
     {
+        isPaused = true;
         isPerfect = true;
 
         Bobber.Reset();
