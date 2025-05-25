@@ -48,7 +48,7 @@
 
   "ExBobberBar.Difficulty": "Difficulty: {{ actual }} ({{ origin }})",
   "ExBobberBar.Size": "Size: {{ size }} [{{ minSize }}, {{ maxSize }}]",
-  "ExBobberBar.Perfect": "Perfect: {{ value }}",
+  "ExBobberBar.Perfect": "Perfect",
 
   "ExBobberBar.Chance.Veer": "Veer Chance: {{ chance }}",
   "ExBobberBar.Chance.Dart": "Dart Chance: {{ chance }}",

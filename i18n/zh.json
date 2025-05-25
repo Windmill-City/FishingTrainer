@@ -48,7 +48,7 @@
 
   "ExBobberBar.Difficulty": "难度: {{ actual }} ({{ origin }})",
   "ExBobberBar.Size": "大小: {{ size }} [{{ minSize }}, {{ maxSize }}]",
-  "ExBobberBar.Perfect": "完美: {{ value }}",
+  "ExBobberBar.Perfect": "完美",
 
   "ExBobberBar.Chance.Veer": "变向几率：{{ chance }}",
   "ExBobberBar.Chance.Dart": "冲刺几率：{{ chance }}",

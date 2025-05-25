@@ -171,7 +171,7 @@ class FishingGame : IClickableMenu
         // if TimeToPauseOnNoAction is zero, then disable the pause function
         if (ModEntry.Config.TimeToPauseOnNoAction == 0)
         {
-            if(isPressed) isPaused = false;
+            if (isPressed) isPaused = false;
             return;
         }
 
@@ -327,7 +327,7 @@ class FishingGame : IClickableMenu
         Y_Info += 40;
 
         // Perfect
-        b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Perfect(isPerfect), new Vector2(X_Info, Y_Info), Color.Black);
+        b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Perfect(), new Vector2(X_Info, Y_Info), isPerfect ? Color.Orange : Color.Black);
         Y_Info += 40;
 
         // Status
