@@ -688,10 +688,10 @@ class Reel
 
 class ExBobberBar : IClickableMenu
 {
-    public const int TimeToPauseOnNoAction = 60 * 3;
+    public int TimeToPauseOnNoAction = 60 * 3;
     public RootElement Ui;
     public bool hasPaused = true;
-    public int PauseTimer = TimeToPauseOnNoAction;
+    public int PauseTimer = 0;
     public bool hasTreasureHunter = false;
     public int TrapBobber = 0;
     public int CorkBobber = 0;
