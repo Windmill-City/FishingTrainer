@@ -1,4 +1,27 @@
 {
   "Config.OpenMiniGame": "Open Fishing MiniGame Menu",
-  "Config.OpenMiniGame.ToolTip": "Place for you to enhance your fishing skill."
+  "Config.OpenMiniGame.ToolTip": "Place for you to enhance your fishing skill.",
+  "ExBobberBar.TimeToPauseNoAction": "Pause: ",
+  "ExBobberBar.Paused": "Paused",
+  "ExBobberBar.Running": "Running",
+  "ExBobberBar.DebugHint": "Debug Hint",
+  "ExBobberBar.MotionType.Mixed": "Mixed",
+  "ExBobberBar.MotionType.Dart": "Dart",
+  "ExBobberBar.MotionType.Smooth": "Smooth",
+  "ExBobberBar.MotionType.Floater": "Floater",
+  "ExBobberBar.MotionType.Sinker": "Sinker",
+  "ExBobberBar.Difficulty": "Difficulty: ",
+  "ExBobberBar.Size": "Size: ",
+  "ExBobberBar.Perfect": "Perfect: ",
+  "ExBobberBar.Chance.Veer": "Veer Chance: ",
+  "ExBobberBar.Chance.Dart": "Dart Chance: ",
+  "ExBobberBar.Chance.QuickDart": "QuickDart Chance: ",
+  "ExBobberBar.Treasure": "Treasure",
+  "ExBobberBar.TrapBobber": "Trap Bobber",
+  "ExBobberBar.CorkBobber": "Cork Bobber",
+  "ExBobberBar.LeadBobber": "Lead Bobber",
+  "ExBobberBar.BarbedHook": "Barbed Hook",
+  "ExBobberBar.TreasureHunter": "Treasure Hunter",
+  "ExBobberBar.BlessingOfWaters": "Blessing Of Waters",
+  "ExBobberBar.FishingLevel": "Fishing Level"
 }

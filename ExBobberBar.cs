@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework.Input;
 using SpaceCore.UI;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.BellsAndWhistles;
 using StardewValley.Extensions;
 using StardewValley.Menus;
 
@@ -540,6 +539,12 @@ class Fish
     public Fish(ExBobberBar Bar)
     {
         Context = Bar;
+
+        List<FishData>? fishData;
+        FishContent.GetFishContents().TryGetValue(MotionType.Smooth, out fishData);
+        fish = fishData!.First();
+
+        Reset();
     }
 
     public void onTick()
@@ -709,8 +714,7 @@ class ExBobberBar : IClickableMenu
     public int TimeToPauseOnNoAction = 60 * 3;
     public RootElement Ui;
     public Image BobberBarUi;
-    public bool AutoPaused = true;
-    public bool ForcePaused = false;
+    public bool isPaused = true;
     public int PauseTimer = 0;
     public bool hasDeluxeBait = false;
     public bool hasTreasureHunter = false;
@@ -782,7 +786,6 @@ class ExBobberBar : IClickableMenu
             return TreasureBottom <= BobberBarBottom && TreasureTop >= BobberBarTop;
         }
     }
-    public SparklingText? PerfectText = null;
 
     public ExBobberBar() : base(0, 0, 320 * 4, 180 * 4)
     {
@@ -857,17 +860,17 @@ class ExBobberBar : IClickableMenu
             }
             else
             {
-                AutoPaused = true;
+                isPaused = true;
                 StopSound();
             }
         }
         else
         {
-            AutoPaused = false;
+            isPaused = false;
             PauseTimer = TimeToPauseOnNoAction;
         }
 
-        if (AutoPaused || ForcePaused) return;
+        if (isPaused) return;
 
         Bobber.onTick();
         BobberBar.onTick();
@@ -888,6 +891,8 @@ class ExBobberBar : IClickableMenu
 
     public void Reset()
     {
+        isPerfect = true;
+
         Bobber.Reset();
         BobberBar.Reset();
 
@@ -934,18 +939,6 @@ class ExBobberBar : IClickableMenu
             b.Draw(Game1.staminaRect, new Rectangle(X_BL, Y_BT - 4 + (int)(BobberBar.Position + BobberBar.Height), 9 * 4, 4), Color.White);
         }
 
-        //Bobber
-        var BobberShake = BobberInBar ? Bobber.Shaker.Shake : Vector2.Zero;
-        b.Draw(Game1.mouseCursors, new Vector2(X_BL, Y_BT + Bobber.Position) + BobberShake, new Rectangle(614, 1840, 20, 20), Color.White, 0f, new Vector2(1f, 1f), 2f, SpriteEffects.None, 0.88f);
-
-        if (showDebugHint)
-        {
-            // Bobber Top
-            b.Draw(Game1.staminaRect, new Rectangle(X_BL, Y_BT + (int)Bobber.Position, 9 * 4, 4), Color.Red);
-            // Bobber Bottom
-            b.Draw(Game1.staminaRect, new Rectangle(X_BL, Y_BT - 4 + (int)(Bobber.Position + Bobber.Height), 9 * 4, 4), Color.White);
-        }
-
         if (!Treasure.isHidden && !Treasure.isCaught)
         {
             // Treasure
@@ -967,8 +960,68 @@ class ExBobberBar : IClickableMenu
             }
         }
 
+        //Bobber
+        var BobberShake = BobberInBar ? Bobber.Shaker.Shake : Vector2.Zero;
+        b.Draw(Game1.mouseCursors, new Vector2(X_BL, Y_BT + Bobber.Position) + BobberShake, new Rectangle(614, 1840, 20, 20), Color.White, 0f, new Vector2(1f, 1f), 2f, SpriteEffects.None, 0.88f);
+
+        if (showDebugHint)
+        {
+            // Bobber Top
+            b.Draw(Game1.staminaRect, new Rectangle(X_BL, Y_BT + (int)Bobber.Position, 9 * 4, 4), Color.Red);
+            // Bobber Bottom
+            b.Draw(Game1.staminaRect, new Rectangle(X_BL, Y_BT - 4 + (int)(Bobber.Position + Bobber.Height), 9 * 4, 4), Color.White);
+        }
+
+
         // Reel
         b.Draw(Game1.mouseCursors, new Vector2(X + 5.5f * 4, Y + 128.5f * 4), new Rectangle(257, 1990, 5, 10), Color.White, Reel.ReelRotation, new Vector2(2.5f, 9.5f), 4f, SpriteEffects.None, 0.9f);
+
+        var Y_Offset = 128;
+
+        if (Fish.fish is not null)
+        {
+            // Sonar Background
+            b.Draw(Game1.mouseCursors_1_6, new Vector2(256, 32), new Rectangle(227, 6, 29, 24), Color.White, 0f, new Vector2(10f, 0f), 4f, SpriteEffects.None, 0.88f);
+            // Fish Object
+            Fish.fish.fishObject.drawInMenu(b, new Vector2(256, 32 + 16), 1);
+
+            // Fish Display Name
+            b.DrawString(Game1.dialogueFont, Fish.fish.fishObject.DisplayName, new Vector2(256 - 16, Y_Offset), Color.Black);
+            Y_Offset += 40;
+            // Fish Motion Type
+            switch (Fish.fish.motionType)
+            {
+                case MotionType.Mixed:
+                    b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_MotionType_Mixed(), new Vector2(256 - 16, Y_Offset), Color.DarkRed);
+                    break;
+                case MotionType.Dart:
+                    b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_MotionType_Dart(), new Vector2(256 - 16, Y_Offset), Color.Orange);
+                    break;
+                case MotionType.Smooth:
+                    b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_MotionType_Smooth(), new Vector2(256 - 16, Y_Offset), Color.DarkGreen);
+                    break;
+                case MotionType.Floater:
+                    b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_MotionType_Floater(), new Vector2(256 - 16, Y_Offset), Color.DarkBlue);
+                    break;
+                case MotionType.Sinker:
+                    b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_MotionType_Sinker(), new Vector2(256 - 16, Y_Offset), Color.DarkBlue);
+                    break;
+            }
+            Y_Offset += 40;
+            // Fish Difficulty
+            b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Difficulty(), new Vector2(256 - 16, Y_Offset), Color.Black);
+            Y_Offset += 40;
+            // Fish Size
+            b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Size(), new Vector2(256 - 16, Y_Offset), Color.Black);
+            Y_Offset += 40;
+        }
+
+        // Perfect
+        b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Perfect(), new Vector2(256 - 16, Y_Offset), Color.Black);
+        Y_Offset += 40;
+
+        // Status
+        b.DrawString(Game1.dialogueFont, !isPaused ? I18n.ExBobberBar_Running() : I18n.ExBobberBar_Paused(), new Vector2(256 - 16, Y_Offset), !isPaused ? Color.DarkGreen : Color.DarkRed);
 
         drawMouse(b);
 

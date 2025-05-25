@@ -32,6 +32,8 @@ class FishContent
 
         foreach ((var fishId, var raw) in dictionary)
         {
+            Monitor.Log($"{fishId}: {raw}", LogLevel.Debug);
+
             string[] rawContent = raw.Split('/');
 
             // fish catch by trap
@@ -63,8 +65,8 @@ class FishContent
                     continue;
             }
 
-            FishContents.GetValueOrDefault(motionType, new List<FishData>())
-            .Add(new FishData
+            var Content = FishContents.GetValueOrDefault(motionType, new List<FishData>());
+            Content.Add(new FishData
             (
                 ItemRegistry.Create(fishId),
                 motionType,
@@ -72,6 +74,7 @@ class FishContent
                 Convert.ToInt32(rawContent[3]),
                 Convert.ToInt32(rawContent[4])
             ));
+            FishContents[motionType] = Content;
         }
 
         foreach (var key in FishContents.Keys)

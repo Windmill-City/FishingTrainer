@@ -1,5 +1,28 @@
 {
   "Config.OpenMiniGame": "打开钓鱼练习菜单",
-  "Config.OpenMiniGame.ToolTip": "你练习钓鱼的地方."
+  "Config.OpenMiniGame.ToolTip": "你练习钓鱼的地方.",
+  "ExBobberBar.TimeToPauseNoAction": "暂停：",
+  "ExBobberBar.Paused": "已暂停",
+  "ExBobberBar.Running": "运行中",
+  "ExBobberBar.DebugHint": "调试标识",
+  "ExBobberBar.MotionType.Mixed": "混合型",
+  "ExBobberBar.MotionType.Dart": "猛冲型",
+  "ExBobberBar.MotionType.Smooth": "平滑型",
+  "ExBobberBar.MotionType.Floater": "漂浮型",
+  "ExBobberBar.MotionType.Sinker": "下坠型",
+  "ExBobberBar.Difficulty": "难度",
+  "ExBobberBar.Size": "大小",
+  "ExBobberBar.Perfect": "完美",
+  "ExBobberBar.Chance.Veer": "变向几率：",
+  "ExBobberBar.Chance.Dart": "冲刺几率：",
+  "ExBobberBar.Chance.QuickDart": "猛冲几率：",
+  "ExBobberBar.Treasure": "宝藏",
+  "ExBobberBar.TrapBobber": "陷阱浮标",
+  "ExBobberBar.CorkBobber": "软木塞浮标",
+  "ExBobberBar.LeadBobber": "铅制浮标",
+  "ExBobberBar.BarbedHook": "倒刺钩",
+  "ExBobberBar.TreasureHunter": "寻宝者",
+  "ExBobberBar.BlessingOfWaters": "水之祝福",
+  "ExBobberBar.FishingLevel": "钓鱼等级："
 }
 
