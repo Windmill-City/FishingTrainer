@@ -47,24 +47,33 @@ class BarbedHook
     public const float AccModifierExtra = 0.9f;
     public const float AccelerationBase = 0.2f;
     public const float AccelerationExtra = 0.05f;
+    public ExBobberBar Context;
     public int Count = 0;
 
-    public void onTick(ExBobberBar Bar)
+    public BarbedHook(ExBobberBar Bar)
     {
-        if (Bar.BobberInBar)
+        Context = Bar;
+    }
+
+    public void onTick()
+    {
+        if (Context.BobberInBar)
         {
             for (int i = 0; i < Count; i++)
             {
                 var acceleration = i > 0 ? AccelerationExtra : AccelerationBase;
 
-                var midBar = Bar.BobberBar.Position + Bar.BobberBar.Height / 2;
-                var midBobber = Bar.Bobber.Position + Bobber.Height / 2;
+                var Bobber = Context.Bobber;
+                var BobberBar = Context.BobberBar;
+
+                var midBar = BobberBar.Position + BobberBar.Height / 2;
+                var midBobber = Bobber.Position + Bobber.Height / 2;
                 // is bobber over the bar?
-                Bar.BobberBar.Velocity += midBobber < midBar ? -acceleration : acceleration;
+                BobberBar.Velocity += midBobber < midBar ? -acceleration : acceleration;
 
                 // bar acceleration modifer
                 var modifier = i > 0 ? AccModifierExtra : AccelerationBase;
-                Bar.BobberBar.Acceleration *= modifier;
+                BobberBar.Acceleration *= modifier;
             }
         }
     }
@@ -106,6 +115,7 @@ class FloaterSinker
 class Bobber
 {
     public static Shaker Shaker = new Shaker(-10, 11, 10f);
+    public ExBobberBar Context;
     public const int Height = 20 * 2;
     public const int PositionMax = 141 * 4 - Height;
     public const float PositionCloseMargin = 3f;
@@ -229,6 +239,11 @@ class Bobber
         set => _position = Math.Clamp(value, 0, PositionMax);
     }
 
+    public Bobber(ExBobberBar Bar)
+    {
+        Context = Bar;
+    }
+
     public void Reset()
     {
         floaterSinker.Reset();
@@ -283,6 +298,7 @@ class Bobber
 class BobberBar
 {
     public static Shaker Shaker = new Shaker(-10, 11, 10f);
+    public ExBobberBar Context;
     public const int BobberBarBaseHeight = 96;
     public const int BobberBarIncPerLevel = 8;
     public const int PositionMax = 141 * 4;
@@ -316,8 +332,9 @@ class BobberBar
         }
     }
 
-    public BobberBar()
+    public BobberBar(ExBobberBar Bar)
     {
+        Context = Bar;
         Reset();
     }
 
@@ -328,23 +345,23 @@ class BobberBar
         JustHitBottom = JustHitTop = false;
     }
 
-    public void onTick(ExBobberBar Bar)
+    public void onTick()
     {
 
-        Acceleration = Bar.isPressed ? -AccelerationBase : AccelerationBase;
+        Acceleration = Context.isPressed ? -AccelerationBase : AccelerationBase;
 
         // if key pressed when bobber bar at top/bottom, then zero its velocity
-        if (Bar.isPressed && (AtTop || AtBottom))
+        if (Context.isPressed && (AtTop || AtBottom))
         {
             Velocity = 0;
         }
 
-        if (Bar.BobberInBar)
+        if (Context.BobberInBar)
         {
             Acceleration *= 0.5f;
         }
 
-        Bar.BarbedHook.onTick(Bar);
+        Context.BarbedHook.onTick();
 
         Velocity += Acceleration;
         Position += Velocity;
@@ -355,9 +372,9 @@ class BobberBar
             Game1.playSound("shiny4");
         }
 
-        if (JustHitBottom && Bar.LeadBobber > 0)
+        if (JustHitBottom && Context.LeadBobber > 0)
         {
-            Velocity *= Bar.LeadBobber * 0.1f;
+            Velocity *= Context.LeadBobber * 0.1f;
         }
     }
 }
@@ -365,6 +382,7 @@ class BobberBar
 class Treasure
 {
     public static Shaker Shaker = new Shaker(-3, 2, 1f);
+    public ExBobberBar Context;
     public const int Height = 24 * 2;
     public const int PositionMax = 141 * 4 - Height;
     public const int PositionMin = 8;
@@ -393,21 +411,23 @@ class Treasure
             _catchProgress = Math.Clamp(value, 0, 1);
         }
     }
-
-    public float RandomPosition(BobberBar Bar)
+    public float RandomPosition
     {
-        if (Bar.Position > BobberBar.PositionMax / 2)
+        get
         {
-            // generate above the bar
-            return Game1.random.Next(PositionMin, (int)(Bar.Position - Height));
-        }
-        else
-        {
-            // generate below the bar
-            return Game1.random.Next((int)(Bar.Position + Bar.Height), PositionMax);
+            var Bar = Context.BobberBar;
+            if (Bar.Position > BobberBar.PositionMax / 2)
+            {
+                // generate above the bar
+                return Game1.random.Next(PositionMin, (int)(Bar.Position - Height));
+            }
+            else
+            {
+                // generate below the bar
+                return Game1.random.Next((int)(Bar.Position + Bar.Height), PositionMax);
+            }
         }
     }
-
 
     public void Reset()
     {
@@ -417,12 +437,13 @@ class Treasure
         AppearTimer = RandomAppearTime;
     }
 
-    public Treasure()
+    public Treasure(ExBobberBar Bar)
     {
+        Context = Bar;
         Reset();
     }
 
-    public void onTick(ExBobberBar Bar)
+    public void onTick()
     {
         if (isExist)
         {
@@ -434,7 +455,7 @@ class Treasure
                 }
                 else
                 {
-                    Position = RandomPosition(Bar.BobberBar);
+                    Position = RandomPosition;
                     isHidden = false;
                     Game1.playSound("dwop");
                 }
@@ -443,7 +464,7 @@ class Treasure
             {
                 if (!isCaught)
                 {
-                    CatchProgress += Bar.TreasureInBar ? ProgressIncPerTick : ProgressDecPerTick;
+                    CatchProgress += Context.TreasureInBar ? ProgressIncPerTick : ProgressDecPerTick;
                     if (CatchProgress == 1)
                     {
                         isCaught = true;
@@ -458,17 +479,24 @@ class Treasure
 class Fish
 {
     public const int TimePerFishSizeReduction = 800;
+    public ExBobberBar Context;
     public Item? fishObject = null;
     public int quality = 0;
     public int size = 0;
     public int minSize = 0;
     public int maxSize = 0;
     public int fishSizeReductionTimer = TimePerFishSizeReduction;
+
+    public Fish(ExBobberBar Bar)
+    {
+        Context = Bar;
+    }
 }
 
 class ChallengeBait
 {
     public const int ChallengeFishMax = 3;
+    public ExBobberBar Context;
     public bool hasChallengeBait = false;
     private int challengeFish;
     public int ChallengeFish
@@ -479,10 +507,16 @@ class ChallengeBait
             challengeFish = Math.Clamp(value, 0, ChallengeFishMax);
         }
     }
+
+    public ChallengeBait(ExBobberBar Bar)
+    {
+        Context = Bar;
+    }
 }
 
 class Catch
 {
+    public ExBobberBar Context;
     public float ProgressIncPerTick = 0.002f;
     public float ProgressDecPerTick = -0.003f;
     public bool isCaught = false;
@@ -501,16 +535,17 @@ class Catch
         CatchProgress = 0.3f;
     }
 
-    public Catch()
+    public Catch(ExBobberBar Bar)
     {
+        Context = Bar;
         Reset();
     }
 
-    public void onTick(ExBobberBar Bar)
+    public void onTick()
     {
         if (!isCaught)
         {
-            CatchProgress += Bar.BobberInBar ? ProgressIncPerTick : ProgressDecPerTick;
+            CatchProgress += Context.BobberInBar ? ProgressIncPerTick : ProgressDecPerTick;
             if (CatchProgress == 1)
             {
                 isCaught = true;
@@ -522,20 +557,27 @@ class Catch
 
 class Reel
 {
+    public ExBobberBar Context;
     public ICue? ReelSound = null;
     public ICue? UnReelSound = null;
     public float ReelRotation = 0;
     public bool isButtonPressed = false;
     public bool hasBend = false;
-    public void onTick(ExBobberBar Bar)
+
+    public Reel(ExBobberBar Bar)
     {
-        if (Bar.isPressed && !hasBend)
+        Context = Bar;
+    }
+
+    public void onTick()
+    {
+        if (Context.isPressed && !hasBend)
         {
             Game1.playSound("fishingRodBend");
         }
-        hasBend = Bar.isPressed;
+        hasBend = Context.isPressed;
 
-        if (Bar.BobberInBar)
+        if (Context.BobberInBar)
         {
             ReelRotation += (float)(Math.PI / 8f);
             UnReelSound?.Stop(AudioStopOptions.Immediate);
@@ -546,8 +588,8 @@ class Reel
         }
         else
         {
-            var BobberBar = Bar.BobberBar;
-            var len = Math.Abs(Bar.Bobber.Position - (BobberBar.Position + BobberBar.Height / 2));
+            var BobberBar = Context.BobberBar;
+            var len = Math.Abs(Context.Bobber.Position - (BobberBar.Position + BobberBar.Height / 2));
             ReelRotation -= (float)Math.PI / Math.Max(10f, 200f - len);
             ReelSound?.Stop(AudioStopOptions.Immediate);
             if (UnReelSound == null || UnReelSound.IsStopped)
@@ -565,17 +607,18 @@ class ExBobberBar : IClickableMenu
     public int TrapBobber = 0;
     public int CorkBobber = 0;
     public int LeadBobber = 0;
-    public BarbedHook BarbedHook = new BarbedHook();
+    public BarbedHook BarbedHook;
     public bool isPerfect = true;
     public bool showDebugHint = true;
     public bool hasBlessingOfWaters = false;
     public int FishingLevel = 0;
-    public Fish Fish = new Fish();
-    public Reel Reel = new Reel();
-    public Catch Catch = new Catch();
-    public Bobber Bobber = new Bobber();
-    public BobberBar BobberBar = new BobberBar();
-    public Treasure Treasure = new Treasure();
+    public Fish Fish;
+    public Reel Reel;
+    public Catch Catch;
+    public Bobber Bobber;
+    public BobberBar BobberBar;
+    public Treasure Treasure;
+    public ChallengeBait ChallengeBait;
     public bool isPressed =>
         Game1.oldMouseState.LeftButton == ButtonState.Pressed
         || Game1.isOneOfTheseKeysDown(Game1.oldKBState, Game1.options.useToolButton)
@@ -616,6 +659,15 @@ class ExBobberBar : IClickableMenu
 
     public ExBobberBar() : base(0, 0, 320 * 4, 180 * 4)
     {
+        BarbedHook = new BarbedHook(this);
+        Fish = new Fish(this);
+        Reel = new Reel(this);
+        Catch = new Catch(this);
+        Bobber = new Bobber(this);
+        BobberBar = new BobberBar(this);
+        Treasure = new Treasure(this);
+        ChallengeBait = new ChallengeBait(this);
+
         behaviorBeforeCleanup += BeforeExitMenu;
 
         Ui = new RootElement();
@@ -663,10 +715,10 @@ class ExBobberBar : IClickableMenu
         Ui.Update();
 
         Bobber.onTick();
-        BobberBar.onTick(this);
-        Treasure.onTick(this);
-        Reel.onTick(this);
-        Catch.onTick(this);
+        BobberBar.onTick();
+        Treasure.onTick();
+        Reel.onTick();
+        Catch.onTick();
     }
 
     public override void draw(SpriteBatch b)
