@@ -43,7 +43,7 @@
   "ExBobberBar.MotionType.Floater": "Floater",
   "ExBobberBar.MotionType.Sinker": "Sinker",
 
-  "ExBobberBar.Difficulty": "Difficulty: {{ origin }} ({{ actual }})",
+  "ExBobberBar.Difficulty": "Difficulty: {{ actual }} ({{ origin }})",
   "ExBobberBar.Size": "Size: {{ size }} [{{ minSize }}, {{ maxSize }}]",
   "ExBobberBar.Perfect": "Perfect: {{ value }}",
 

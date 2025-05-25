@@ -44,7 +44,7 @@
   "ExBobberBar.MotionType.Floater": "漂浮型",
   "ExBobberBar.MotionType.Sinker": "下坠型",
 
-  "ExBobberBar.Difficulty": "难度: {{ origin }} ({{ actual }})",
+  "ExBobberBar.Difficulty": "难度: {{ actual }} ({{ origin }})",
   "ExBobberBar.Size": "大小: {{ size }} [{{ minSize }}, {{ maxSize }}]",
   "ExBobberBar.Perfect": "完美: {{ value }}",
 

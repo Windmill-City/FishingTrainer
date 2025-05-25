@@ -320,7 +320,7 @@ class FishingGame : IClickableMenu
         }
         Y_Info += 40;
         // Fish Difficulty
-        b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Difficulty(Fish.Content.difficulty, Bobber.Difficulty), new Vector2(X_Info, Y_Info), Color.Black);
+        b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Difficulty(Bobber.Difficulty, Fish.Content.difficulty), new Vector2(X_Info, Y_Info), Color.Black);
         Y_Info += 40;
         // Fish Size
         b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Size(Fish.Size, Fish.Content.minSize, Fish.Content.maxSize), new Vector2(X_Info, Y_Info), Color.Black);
