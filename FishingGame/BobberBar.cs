@@ -40,6 +40,8 @@ class BobberBar
         get
         {
             var height = BobberBarBaseHeight;
+            // Fishing level
+            height += ModEntry.Config.FishingLevel * 8;
             // Cork Bobber
             height += ModEntry.Config.CorkBobber * 24;
             // Deluxe Bait
