@@ -280,61 +280,61 @@ class FishingGame : IClickableMenu
         // Reel
         b.Draw(Game1.mouseCursors, new Vector2(X_BB + 5.5f * 4, Y_BB + 128.5f * 4), new Rectangle(257, 1990, 5, 10), Color.White, Reel.ReelRotation, new Vector2(2.5f, 9.5f), 4f, SpriteEffects.None, 0.9f);
 
-        var X_INFO = X + 256;
-        var Y_INFO = Y + 32;
+        var X_Info = X + 256;
+        var Y_Info = Y + 32;
 
         // Sonar Background
-        b.Draw(Game1.mouseCursors_1_6, new Vector2(X_INFO, Y_INFO), new Rectangle(227, 6, 29, 24), Color.White, 0f, new Vector2(10f, 0f), 4f, SpriteEffects.None, 0.88f);
+        b.Draw(Game1.mouseCursors_1_6, new Vector2(X_Info, Y_Info), new Rectangle(227, 6, 29, 24), Color.White, 0f, new Vector2(10f, 0f), 4f, SpriteEffects.None, 0.88f);
         // Fish Object
-        Fish.Content.fishObject.drawInMenu(b, new Vector2(X_INFO, Y_INFO + 16), 1);
-        Y_INFO += 128;
+        Fish.Content.fishObject.drawInMenu(b, new Vector2(X_Info, Y_Info + 16), 1);
+        Y_Info += 128;
 
         // Fish Display Name
-        b.DrawString(Game1.dialogueFont, Fish.Content.fishObject.DisplayName, new Vector2(X_INFO - 16, Y_INFO), Color.Black);
-        Y_INFO += 40;
+        b.DrawString(Game1.dialogueFont, Fish.Content.fishObject.DisplayName, new Vector2(X_Info - 16, Y_Info), Color.Black);
+        Y_Info += 40;
         // Fish Motion Type
         switch (Fish.Content.motionType)
         {
             case MotionType.Mixed:
-                b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_MotionType_Mixed(), new Vector2(X_INFO - 16, Y_INFO), Color.DarkBlue);
+                b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_MotionType_Mixed(), new Vector2(X_Info - 16, Y_Info), Color.DarkBlue);
                 break;
             case MotionType.Dart:
-                b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_MotionType_Dart(), new Vector2(X_INFO - 16, Y_INFO), Color.DarkBlue);
+                b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_MotionType_Dart(), new Vector2(X_Info - 16, Y_Info), Color.DarkBlue);
                 break;
             case MotionType.Smooth:
-                b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_MotionType_Smooth(), new Vector2(X_INFO - 16, Y_INFO), Color.DarkBlue);
+                b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_MotionType_Smooth(), new Vector2(X_Info - 16, Y_Info), Color.DarkBlue);
                 break;
             case MotionType.Floater:
-                b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_MotionType_Floater(), new Vector2(X_INFO - 16, Y_INFO), Color.DarkBlue);
+                b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_MotionType_Floater(), new Vector2(X_Info - 16, Y_Info), Color.DarkBlue);
                 break;
             case MotionType.Sinker:
-                b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_MotionType_Sinker(), new Vector2(X_INFO - 16, Y_INFO), Color.DarkBlue);
+                b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_MotionType_Sinker(), new Vector2(X_Info - 16, Y_Info), Color.DarkBlue);
                 break;
         }
-        Y_INFO += 40;
+        Y_Info += 40;
         // Fish Difficulty
-        b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Difficulty(Fish.Content.difficulty, Bobber.Difficulty), new Vector2(X_INFO - 16, Y_INFO), Color.Black);
-        Y_INFO += 40;
+        b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Difficulty(Fish.Content.difficulty, Bobber.Difficulty), new Vector2(X_Info - 16, Y_Info), Color.Black);
+        Y_Info += 40;
         // Fish Size
-        b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Size(Fish.Size, Fish.Content.minSize, Fish.Content.maxSize), new Vector2(X_INFO - 16, Y_INFO), Color.Black);
-        Y_INFO += 40;
+        b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Size(Fish.Size, Fish.Content.minSize, Fish.Content.maxSize), new Vector2(X_Info - 16, Y_Info), Color.Black);
+        Y_Info += 40;
 
         // Perfect
-        b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Perfect(isPerfect), new Vector2(X_INFO - 16, Y_INFO), Color.Black);
-        Y_INFO += 40;
+        b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Perfect(isPerfect), new Vector2(X_Info - 16, Y_Info), Color.Black);
+        Y_Info += 40;
 
         // Status
-        b.DrawString(Game1.dialogueFont, !isPaused ? I18n.ExBobberBar_Running() : I18n.ExBobberBar_Paused(), new Vector2(X_INFO - 16, Y_INFO), !isPaused ? Color.DarkGreen : Color.DarkRed);
-        Y_INFO += 40 * 3;
+        b.DrawString(Game1.dialogueFont, !isPaused ? I18n.ExBobberBar_Running() : I18n.ExBobberBar_Paused(), new Vector2(X_Info - 16, Y_Info), !isPaused ? Color.DarkGreen : Color.DarkRed);
+        Y_Info += 40 * 3;
 
         // Chance Veer
-        b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Chance_Veer($"{Bobber.ChanceVeer:P}"), new Vector2(X_INFO - 16, Y_INFO), Color.Black);
-        Y_INFO += 40;
+        b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Chance_Veer($"{Bobber.ChanceVeer:P}"), new Vector2(X_Info - 16, Y_Info), Color.Black);
+        Y_Info += 40;
         // Chance Dart
-        b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Chance_Dart($"{Bobber.ChanceDart:P}"), new Vector2(X_INFO - 16, Y_INFO), Color.Black);
-        Y_INFO += 40;
+        b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Chance_Dart($"{Bobber.ChanceDart:P}"), new Vector2(X_Info - 16, Y_Info), Color.Black);
+        Y_Info += 40;
         // Chance QuickDart
-        b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Chance_QuickDart($"{Bobber.ChanceQuickDart:P}"), new Vector2(X_INFO - 16, Y_INFO), Color.Black);
+        b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Chance_QuickDart($"{Bobber.ChanceQuickDart:P}"), new Vector2(X_Info - 16, Y_Info), Color.Black);
 
         drawMouse(b);
 
