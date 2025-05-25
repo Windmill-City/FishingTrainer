@@ -137,8 +137,8 @@ class FishingGame : IClickableMenu
 
     private void Reposition()
     {
-        xPositionOnScreen = (Game1.viewport.Width - width) / 2;
-        yPositionOnScreen = (Game1.viewport.Height - height) / 2;
+        xPositionOnScreen = (int)((Game1.viewport.Width - width * Game1.options.uiScale) / 2);
+        yPositionOnScreen = (int)((Game1.viewport.Height - height*Game1.options.uiScale) / 2);
     }
 
     public override void update(GameTime time)
@@ -210,8 +210,6 @@ class FishingGame : IClickableMenu
 
     public override void draw(SpriteBatch b)
     {
-        Game1.StartWorldDrawInUI(b);
-
         var X = xPositionOnScreen;
         var Y = yPositionOnScreen;
 
@@ -346,7 +344,5 @@ class FishingGame : IClickableMenu
         b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Chance_QuickDart($"{Bobber.ChanceQuickDart:P}"), new Vector2(X_Info, Y_Info), Color.Black);
 
         drawMouse(b);
-
-        Game1.EndWorldDrawInUI(b);
     }
 }
