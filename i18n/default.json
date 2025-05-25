@@ -1,27 +1,50 @@
 {
-  "Config.OpenMiniGame": "Open Fishing MiniGame Menu",
-  "Config.OpenMiniGame.ToolTip": "Place for you to enhance your fishing skill.",
-  "ExBobberBar.TimeToPauseNoAction": "Pause: ",
+  "Config.OpenFishingGame": "Open FishingGame",
+  "Config.OpenFishingGame.ToolTip": "A FishingGame Simulator.",
+
+  "Config.TimeToPauseNoAction": "Pause Timer",
+  "Config.TimeToPauseNoAction.ToolTip": "Time to Pause when No Action. In Seconds. (Zero to disable.)",
+
+  "Config.ShowDebugHint": "Debug Hint",
+  "Config.ShowDebugHint.ToolTip": "Show boundary of the object.",
+
+  "Config.FishingLevel": "Fishing Level",
+  "Config.FishingLevel.ToolTip": "BobberBar +24/level.",
+
+  "Config.hasTreasure": "hasTreasure?",
+  "Config.hasDeluxeBait": "hasDeluxeBait?",
+  "Config.hasDeluxeBait.ToolTip": "BobberBar +12",
+  "Config.hasTreasureHunter": "hasTreasureHunter?",
+  "Config.hasTreasureHunter.ToolTip": "Keep progress bar when collecting treasure.",
+  "Config.hasBlessingOfWaters": "hasBlessingOfWaters?",
+  "Config.hasBlessingOfWaters.ToolTip": "Difficulty -50% & progress bar drop speed -50%",
+
+  "Config.TrapBobber": "Trap Bobber",
+  "Config.TrapBobber.ToolTip": "Trap Bobber Count",
+
+  "Config.CorkBobber": "Cork Bobber",
+  "Config.CorkBobber.ToolTip": "Cork Bobber Count",
+
+  "Config.LeadBobber": "Lead Bobber",
+  "Config.LeadBobber.ToolTip": "Lead Bobber Count",
+
+  "Config.BarbedHook": "Barbed Hook",
+  "Config.BarbedHook.ToolTip": "Barbed Hook Count",
+
   "ExBobberBar.Paused": "Paused",
   "ExBobberBar.Running": "Running",
-  "ExBobberBar.DebugHint": "Debug Hint",
+
   "ExBobberBar.MotionType.Mixed": "Mixed",
   "ExBobberBar.MotionType.Dart": "Dart",
   "ExBobberBar.MotionType.Smooth": "Smooth",
   "ExBobberBar.MotionType.Floater": "Floater",
   "ExBobberBar.MotionType.Sinker": "Sinker",
-  "ExBobberBar.Difficulty": "Difficulty: ",
-  "ExBobberBar.Size": "Size: ",
-  "ExBobberBar.Perfect": "Perfect: ",
-  "ExBobberBar.Chance.Veer": "Veer Chance: ",
-  "ExBobberBar.Chance.Dart": "Dart Chance: ",
-  "ExBobberBar.Chance.QuickDart": "QuickDart Chance: ",
-  "ExBobberBar.Treasure": "Treasure",
-  "ExBobberBar.TrapBobber": "Trap Bobber",
-  "ExBobberBar.CorkBobber": "Cork Bobber",
-  "ExBobberBar.LeadBobber": "Lead Bobber",
-  "ExBobberBar.BarbedHook": "Barbed Hook",
-  "ExBobberBar.TreasureHunter": "Treasure Hunter",
-  "ExBobberBar.BlessingOfWaters": "Blessing Of Waters",
-  "ExBobberBar.FishingLevel": "Fishing Level"
+
+  "ExBobberBar.Difficulty": "Difficulty: {{ origin }} ({{ actual }})",
+  "ExBobberBar.Size": "Size: {{ size }} [{{ minSize }}, {{ maxSize }}]",
+  "ExBobberBar.Perfect": "Perfect: {{ value }}",
+
+  "ExBobberBar.Chance.Veer": "Veer Chance: {{ chance }}",
+  "ExBobberBar.Chance.Dart": "Dart Chance: {{ chance }}",
+  "ExBobberBar.Chance.QuickDart": "QuickDart Chance: {{ chance }}"
 }

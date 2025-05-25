@@ -1,28 +1,52 @@
 {
-  "Config.OpenMiniGame": "打开钓鱼练习菜单",
-  "Config.OpenMiniGame.ToolTip": "你练习钓鱼的地方.",
-  "ExBobberBar.TimeToPauseNoAction": "暂停：",
+  "Config.OpenFishingGame": "打开钓鱼练习器",
+  "Config.OpenFishingGame.ToolTip": "钓鱼小游戏模拟器",
+
+  "Config.TimeToPauseNoAction": "暂停计时器",
+  "Config.TimeToPauseNoAction.ToolTip": "无操作时自动暂停的时间 (秒) (0 表示禁用此功能)",
+
+  "Config.ShowDebugHint": "调试标识",
+  "Config.ShowDebugHint.ToolTip": "显示物体的边界",
+
+  "Config.FishingLevel": "钓鱼等级",
+  "Config.FishingLevel.ToolTip": "钓鱼条 +24/级",
+
+  "Config.hasTreasure": "是否有宝藏?",
+  "Config.hasDeluxeBait": "是否有高级鱼饵?",
+  "Config.hasDeluxeBait.ToolTip": "钓鱼条 +12",
+  "Config.hasTreasureHunter": "是否有寻宝者?",
+  "Config.hasTreasureHunter.ToolTip": "收集宝藏时捕获条不下降",
+  "Config.hasBlessingOfWaters": "是否有水之祝福?",
+  "Config.hasBlessingOfWaters.ToolTip": "难度 -50% & 捕获条下降速率 -50%",
+
+  "Config.TrapBobber": "陷阱浮标",
+  "Config.TrapBobber.ToolTip": "陷阱浮标个数",
+
+  "Config.CorkBobber": "软木塞浮标",
+  "Config.CorkBobber.ToolTip": "软木塞浮标个数",
+
+  "Config.LeadBobber": "铅制浮标",
+  "Config.LeadBobber.ToolTip": "铅制浮标个数",
+
+  "Config.BarbedHook": "倒刺钩",
+  "Config.BarbedHook.ToolTip": "倒刺钩个数",
+
+
   "ExBobberBar.Paused": "已暂停",
   "ExBobberBar.Running": "运行中",
-  "ExBobberBar.DebugHint": "调试标识",
+
   "ExBobberBar.MotionType.Mixed": "混合型",
   "ExBobberBar.MotionType.Dart": "猛冲型",
   "ExBobberBar.MotionType.Smooth": "平滑型",
   "ExBobberBar.MotionType.Floater": "漂浮型",
   "ExBobberBar.MotionType.Sinker": "下坠型",
-  "ExBobberBar.Difficulty": "难度",
-  "ExBobberBar.Size": "大小",
-  "ExBobberBar.Perfect": "完美",
-  "ExBobberBar.Chance.Veer": "变向几率：",
-  "ExBobberBar.Chance.Dart": "冲刺几率：",
-  "ExBobberBar.Chance.QuickDart": "猛冲几率：",
-  "ExBobberBar.Treasure": "宝藏",
-  "ExBobberBar.TrapBobber": "陷阱浮标",
-  "ExBobberBar.CorkBobber": "软木塞浮标",
-  "ExBobberBar.LeadBobber": "铅制浮标",
-  "ExBobberBar.BarbedHook": "倒刺钩",
-  "ExBobberBar.TreasureHunter": "寻宝者",
-  "ExBobberBar.BlessingOfWaters": "水之祝福",
-  "ExBobberBar.FishingLevel": "钓鱼等级："
+
+  "ExBobberBar.Difficulty": "难度: {{ origin }} ({{ actual }})",
+  "ExBobberBar.Size": "大小: {{ size }} [{{ minSize }}, {{ maxSize }}]",
+  "ExBobberBar.Perfect": "完美: {{ value }}",
+
+  "ExBobberBar.Chance.Veer": "变向几率：{{ chance }}",
+  "ExBobberBar.Chance.Dart": "冲刺几率：{{ chance }}",
+  "ExBobberBar.Chance.QuickDart": "猛冲几率：{{ chance }}"
 }
 

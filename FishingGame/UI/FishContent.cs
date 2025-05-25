@@ -1,5 +1,4 @@
 using FishingTrainer;
-using StardewModdingAPI;
 using StardewValley;
 
 class FishData
@@ -32,49 +31,31 @@ class FishContent
 
         foreach ((var fishId, var raw) in dictionary)
         {
-            Monitor.Log($"{fishId}: {raw}", LogLevel.Debug);
+            Log.Debug($"{fishId}: {raw}");
 
             string[] rawContent = raw.Split('/');
 
-            // fish catch by trap
+            // fish catch by Crab Pot
             if (rawContent[1].ToLower() == "trap") continue;
 
-            MotionType motionType;
-            switch (rawContent[2].ToLower())
+            MotionType? motionType = rawContent[2].ToLower().asMotionType();
+            if (motionType is null)
             {
-                case "mixed":
-                    motionType = MotionType.Mixed;
-                    break;
-                case "dart":
-                    motionType = MotionType.Dart;
-                    break;
-                case "smooth":
-                    motionType = MotionType.Smooth;
-                    break;
-                case "floater":
-                    motionType = MotionType.Floater;
-                    break;
-                case "sinker":
-                    motionType = MotionType.Sinker;
-                    break;
-                default:
-                    Monitor.Log(
-                        $"Unknown MotionType: {rawContent[2]} for Fish: {raw}",
-                        LogLevel.Warn
-                    );
-                    continue;
+                Log.Warn($"Unknown MotionType: {rawContent[2]} for Fish: {raw}");
+                continue;
             }
 
-            var Content = FishContents.GetValueOrDefault(motionType, new List<FishData>());
+            var Content =
+                FishContents.GetValueOrDefault((MotionType)motionType, new List<FishData>());
             Content.Add(new FishData
             (
                 ItemRegistry.Create(fishId),
-                motionType,
+                (MotionType)motionType,
                 Convert.ToInt32(rawContent[1]),
                 Convert.ToInt32(rawContent[3]),
                 Convert.ToInt32(rawContent[4])
             ));
-            FishContents[motionType] = Content;
+            FishContents[(MotionType)motionType] = Content;
         }
 
         foreach (var key in FishContents.Keys)

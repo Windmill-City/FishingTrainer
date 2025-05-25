@@ -11,9 +11,4 @@
     <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" Version="2.2.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="SpaceCore"
-      HintPath="$(GamePath)\Mods\SpaceCore\SpaceCore.dll" Private="false" />
-  </ItemGroup>
-
 </Project>
