@@ -2,6 +2,9 @@
   "Config.OpenFishingGame": "打开钓鱼练习器",
   "Config.OpenFishingGame.ToolTip": "钓鱼小游戏模拟器",
 
+  "Config.ResetFishingGame": "复位钓鱼练习器",
+  "Config.ResetFishingGame.ToolTip": "复位钓鱼练习器状态",
+
   "Config.TimeToPauseNoAction": "暂停计时器",
   "Config.TimeToPauseNoAction.ToolTip": "无操作时自动暂停的时间 (秒) (0 表示禁用此功能)",
 

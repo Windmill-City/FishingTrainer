@@ -2,6 +2,9 @@
   "Config.OpenFishingGame": "Open FishingGame",
   "Config.OpenFishingGame.ToolTip": "A FishingGame Simulator.",
 
+  "Config.ResetFishingGame": "Reset FishingGame",
+  "Config.ResetFishingGame.ToolTip": "Reset FishingGame Status",
+
   "Config.TimeToPauseNoAction": "Pause Timer",
   "Config.TimeToPauseNoAction.ToolTip": "Time to Pause when No Action. In Seconds. (Zero to disable.)",
 

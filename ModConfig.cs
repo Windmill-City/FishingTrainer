@@ -2,7 +2,8 @@ using StardewModdingAPI.Utilities;
 
 public sealed class ModConfig
 {
-    public KeybindList OpenMiniGame { get; set; } = KeybindList.Parse("F8");
+    public KeybindList OpenFishingGame { get; set; } = KeybindList.Parse("F8");
+    public KeybindList ResetFishingGame { get; set; } = KeybindList.Parse("F9");
 
     public float TimeToPauseOnNoAction = 3; // Seconds
     public bool ShowDebugHints = false;

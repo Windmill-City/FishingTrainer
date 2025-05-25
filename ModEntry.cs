@@ -21,7 +21,7 @@ public class ModEntry : Mod
 
     private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
     {
-        if (Config.OpenMiniGame.JustPressed())
+        if (Config.OpenFishingGame.JustPressed())
         {
             if (Game1.activeClickableMenu == null)
             {
@@ -58,8 +58,16 @@ public class ModEntry : Mod
             mod: ModManifest,
             name: () => I18n.Config_OpenFishingGame(),
             tooltip: () => I18n.Config_OpenFishingGame_ToolTip(),
-            getValue: () => Config.OpenMiniGame,
-            setValue: value => Config.OpenMiniGame = value
+            getValue: () => Config.OpenFishingGame,
+            setValue: value => Config.OpenFishingGame = value
+        );
+
+        configMenu.AddKeybindList(
+            mod: ModManifest,
+            name: () => I18n.Config_ResetFishingGame(),
+            tooltip: () => I18n.Config_ResetFishingGame_ToolTip(),
+            getValue: () => Config.ResetFishingGame,
+            setValue: value => Config.ResetFishingGame = value
         );
 
         configMenu.AddNumberOption(

@@ -186,6 +186,12 @@ class FishingGame : IClickableMenu
             isPaused = false;
             PauseTimer = (int)(ModEntry.Config.TimeToPauseOnNoAction * TickRate);
         }
+
+        // Check if Reset key is pressed
+        if (ModEntry.Config.ResetFishingGame.JustPressed())
+        {
+            Reset();
+        }
     }
 
     public void Reset()
