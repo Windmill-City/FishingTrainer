@@ -581,7 +581,7 @@ class ChallengeBait
 class Catch
 {
     public ExBobberBar Context;
-    public float ProgressIncPerTick = 0.002f;
+    public const float ProgressIncPerTick = 0.002f;
     public bool isCaught = false;
     private float _catchProgress;
     public float CatchProgress
@@ -603,20 +603,27 @@ class Catch
         get
         {
             var decreasePerTick = 0.003f;
+
+            // Trap Bobber Reduction
             var trapBobberReduction = 0.001f;
             for (int i = 0; i < Context.TrapBobber; i++)
             {
                 decreasePerTick -= trapBobberReduction;
                 trapBobberReduction /= 2;
             }
-            return -Math.Max(0.001f, decreasePerTick);
+            decreasePerTick = -Math.Max(0.001f, decreasePerTick);
+
+            // Blessing Of Waters Reduction
+            if (Context.hasBlessingOfWaters) decreasePerTick *= 0.5f;
+
+            return decreasePerTick;
         }
     }
 
     public void Reset()
     {
         isCaught = false;
-        CatchProgress = 0.3f;
+        CatchProgress = 0.1f;
     }
 
     public Catch(ExBobberBar Bar)
@@ -690,7 +697,8 @@ class ExBobberBar : IClickableMenu
 {
     public int TimeToPauseOnNoAction = 60 * 3;
     public RootElement Ui;
-    public bool hasPaused = true;
+    public bool AutoPaused = true;
+    public bool ForcePaused = false;
     public int PauseTimer = 0;
     public bool hasTreasureHunter = false;
     public int TrapBobber = 0;
@@ -818,17 +826,17 @@ class ExBobberBar : IClickableMenu
             }
             else
             {
-                hasPaused = true;
+                AutoPaused = true;
                 StopSound();
             }
         }
         else
         {
-            hasPaused = false;
+            AutoPaused = false;
             PauseTimer = TimeToPauseOnNoAction;
         }
 
-        if (hasPaused) return;
+        if (AutoPaused || ForcePaused) return;
 
         Bobber.onTick();
         BobberBar.onTick();
@@ -851,8 +859,6 @@ class ExBobberBar : IClickableMenu
             Catch.Reset();
             Fish.Reset();
             ChallengeBait.Reset();
-
-
         }
     }
 
