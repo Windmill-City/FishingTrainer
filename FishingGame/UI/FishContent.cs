@@ -51,7 +51,7 @@ public class FishObject
         var RandomSizeBase = Game1.random.NextDouble();
 
         Size = (int)(SizeMin + (SizeMax - SizeMin) * RandomSizeBase) + 1;
-        Obj!.Quality = (!(RandomSizeBase < 0.33)) ? (RandomSizeBase < 0.66 ? 1 : 2) : 0;
+        Obj.Quality = (!(RandomSizeBase < 0.33)) ? (RandomSizeBase < 0.66 ? 1 : 2) : 0;
     }
 
     public void Draw(SpriteBatch b, Vector2 position)
