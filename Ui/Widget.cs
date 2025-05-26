@@ -46,13 +46,12 @@ public abstract class Widget
 
     public static int Text(SpriteBatch b, float x, float y, string text, Color color)
     {
-        var deltaX = Game1.smallFont.MeasureString(text).X;
         b.DrawString(Game1.smallFont, text, new Vector2(x, y), color);
-        return (int)deltaX;
+        return deltaX(text);
     }
 
     public static int deltaX(string text)
     {
-        return (int)Game1.smallFont.MeasureString(text).X;
+        return (int)Math.Ceiling(Game1.smallFont.MeasureString(text).X);
     }
 }

@@ -319,7 +319,7 @@ public class FishingGame : IClickableMenu
         b.DrawString(Game1.dialogueFont, Fish.Item.DisplayName, new Vector2(X_Info, Y_Info), Color.Black);
         Y_Info += 40;
         // Fish Motion Type
-        b.DrawString(Game1.dialogueFont, Fish.Item.Type.ToString(), new Vector2(X_Info, Y_Info), Color.DarkBlue);
+        b.DrawString(Game1.dialogueFont, Fish.Item.Type.asString(), new Vector2(X_Info, Y_Info), Color.DarkBlue);
         Y_Info += 40;
         // Fish Difficulty
         b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Difficulty(Bobber.Difficulty, Fish.Item.Difficulty), new Vector2(X_Info, Y_Info), Color.Black);

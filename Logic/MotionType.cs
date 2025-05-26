@@ -30,7 +30,7 @@ public static class MotionTypeExtension
         }
     }
 
-    public static string ToString(this MotionType motionType)
+    public static string asString(this MotionType motionType)
     {
         switch (motionType)
         {

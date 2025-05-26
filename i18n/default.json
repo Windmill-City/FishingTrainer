@@ -41,6 +41,12 @@
   "Config.CaughtSound": "Caught Sound",
   "Config.EscapeSound": "Escape Sound",
 
+  "MotionType.Mixed": "Mixed",
+  "MotionType.Dart": "Dart",
+  "MotionType.Smooth": "Smooth",
+  "MotionType.Floater": "Floater",
+  "MotionType.Sinker": "Sinker",
+
   "ExBobberBar.Paused": "Paused",
   "ExBobberBar.Running": "Running",
 
@@ -50,11 +56,5 @@
 
   "ExBobberBar.Chance.Veer": "Veer Chance: {{ chance }}",
   "ExBobberBar.Chance.Dart": "Dart Chance: {{ chance }}",
-  "ExBobberBar.Chance.QuickDart": "QuickDart Chance: {{ chance }}",
-
-  "MotionType.Mixed": "Mixed",
-  "MotionType.Dart": "Dart",
-  "MotionType.Smooth": "Smooth",
-  "MotionType.Floater": "Floater",
-  "MotionType.Sinker": "Sinker"
+  "ExBobberBar.Chance.QuickDart": "QuickDart Chance: {{ chance }}"
 }

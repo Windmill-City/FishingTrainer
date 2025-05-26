@@ -36,8 +36,10 @@ public class UiFishSelector : Widget
         // layout
         foreach (var fish in Fishes)
         {
-            Width = Math.Max(deltaX($"{fish.DisplayName}({fish.Difficulty}){fish.Type}"), Width);
+            Width = Math.Max(deltaX($"{fish.DisplayName}({fish.Difficulty}){fish.Type.asString()}"), Width);
         }
+        Width += 48; // icon
+        Width += 32; // padding
     }
 
     public override void Draw(SpriteBatch b)
@@ -46,6 +48,7 @@ public class UiFishSelector : Widget
         int Y_Offset = Y;
         foreach (var fish in Fishes.Skip(ScrollPos))
         {
+            // icon
             fish.Draw(b, new Vector2(X_Offset, Y_Offset - 16), 0.5f);
 
             int deltaX = 48;
@@ -54,7 +57,7 @@ public class UiFishSelector : Widget
             // Difficulty
             deltaX += Text(b, X_Offset + deltaX, Y_Offset, $"({fish.Difficulty})", Color.DarkMagenta);
             // MotionType
-            Text(b, X_Offset + deltaX, Y_Offset, fish.Type.ToString(), Color.DarkBlue);
+            Text(b, X_Offset + deltaX, Y_Offset, fish.Type.asString(), Color.DarkBlue);
 
             Y_Offset += RowHeight;
             if (Y_Offset + RowHeight > Y + Height) break;
