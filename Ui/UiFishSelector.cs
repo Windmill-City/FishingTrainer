@@ -82,6 +82,10 @@ public class UiFishSelector : Widget
                 if (Index < Fishes.Count)
                 {
                     ActiveFish = Fishes[Index].DeepClone();
+
+                    ModEntry.Config.PreviousFishId = ActiveFish.ItemId;
+                    ModEntry.Instance!.Helper.WriteConfig(ModEntry.Config);
+
                     OnFishSelected?.Invoke(this, new EventArgs());
                 }
             }
