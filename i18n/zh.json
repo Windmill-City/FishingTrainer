@@ -44,18 +44,17 @@
   "ExBobberBar.Paused": "已暂停",
   "ExBobberBar.Running": "运行中",
 
-  "ExBobberBar.MotionType.Mixed": "混合型",
-  "ExBobberBar.MotionType.Dart": "猛冲型",
-  "ExBobberBar.MotionType.Smooth": "平滑型",
-  "ExBobberBar.MotionType.Floater": "漂浮型",
-  "ExBobberBar.MotionType.Sinker": "下坠型",
-
   "ExBobberBar.Difficulty": "难度: {{ actual }} ({{ origin }})",
   "ExBobberBar.Size": "大小: {{ size }} [{{ minSize }}, {{ maxSize }}]",
   "ExBobberBar.Perfect": "完美",
 
   "ExBobberBar.Chance.Veer": "变向几率：{{ chance }}",
   "ExBobberBar.Chance.Dart": "冲刺几率：{{ chance }}",
-  "ExBobberBar.Chance.QuickDart": "猛冲几率：{{ chance }}"
-}
+  "ExBobberBar.Chance.QuickDart": "猛冲几率：{{ chance }}",
 
+  "MotionType.Mixed": "混合型",
+  "MotionType.Dart": "猛冲型",
+  "MotionType.Smooth": "平滑型",
+  "MotionType.Floater": "漂浮型",
+  "MotionType.Sinker": "下坠型"
+}

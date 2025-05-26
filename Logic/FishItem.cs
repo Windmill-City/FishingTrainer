@@ -57,15 +57,15 @@ public class FishItem
         Internal.Quality = (!(RandomSizeBase < 0.33)) ? (RandomSizeBase < 0.66 ? 1 : 2) : 0;
     }
 
-    public void Draw(SpriteBatch b, Vector2 position)
+    public void Draw(SpriteBatch b, Vector2 position, float scale = 1f)
     {
-        Internal.drawInMenu(b, position, 1f);
+        Internal.drawInMenu(b, position, scale);
     }
 }
 
 public static class FishItems
 {
-    public static Dictionary<MotionType, List<FishItem>> GetFishItems()
+    public static List<FishItem> GetFishItems()
     {
         return DataLoader.Fish(Game1.content)
         .Select(kvp =>
@@ -78,32 +78,28 @@ public static class FishItems
         .Select(rawData =>
         {
             MotionType type = rawData[3].asMotionType();
-            return new
-            {
-                Key = type,
-                Value = new FishItem(
+            return new FishItem(
                     ItemRegistry.Create(rawData[0]),
                     type,
                     Convert.ToInt32(rawData[2]),
                     Convert.ToInt32(rawData[4]),
                     Convert.ToInt32(rawData[5])
-                )
-            };
+                );
         })
-        .GroupBy(i => i.Key)
-        .ToDictionary(g => g.Key, g => g.Select(i => i.Value).OrderBy(i => i.Difficulty).ToList());
+        .OrderBy(i => i.Difficulty)
+        .ThenBy(i => i.Type)
+        .ThenBy(i => i.DisplayName)
+        .ToList();
     }
 
     public static FishItem GetDefaultFishItem()
     {
-        return GetFishItems()[MotionType.Smooth].First();
+        return GetFishItems().First();
     }
 
     public static FishItem GetPreviousFishItem()
     {
         return GetFishItems()
-        .Values
-        .SelectMany(i => i)
         .Where(i => i.ItemId == ModEntry.Config.PreviousFishId)
         .FirstOrDefault(GetDefaultFishItem());
     }

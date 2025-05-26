@@ -1,4 +1,5 @@
 using FishingTrainer;
+using Force.DeepCloner;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,6 +11,8 @@ using StardewValley.Menus;
 public class FishingGame : IClickableMenu
 {
     public static Texture2D? Background;
+
+    public UiFishSelector Selector;
 
     public const int TickRate = 60; // 60 ticks/sec
 
@@ -97,6 +100,10 @@ public class FishingGame : IClickableMenu
         if (Background is null)
             Background = Content.Load<Texture2D>("LooseSprites\\troutDerbyLetterBG");
 
+        // Fish Selector
+        Selector = new UiFishSelector();
+        Selector.OnFishSelected += onFishSelected;
+
         // Components
         FloaterSinker = new FloaterSinker(this);
         BarbedHook = new BarbedHook(this);
@@ -116,6 +123,12 @@ public class FishingGame : IClickableMenu
         Reposition();
     }
 
+    private void onFishSelected(object? sender, EventArgs e)
+    {
+        Fish.Item = Selector.ActiveFish;
+        Reset();
+    }
+
     private void BeforeExitMenu(IClickableMenu menu)
     {
         StopSound();
@@ -128,6 +141,11 @@ public class FishingGame : IClickableMenu
         Reel.UnReelSound?.Stop(AudioStopOptions.Immediate);
     }
 
+    public override void receiveScrollWheelAction(int direction)
+    {
+        Selector.ScrollPos += direction > 0 ? -3 : 3;
+    }
+
     public override void gameWindowSizeChanged(Rectangle oldBounds, Rectangle newBounds)
     {
         Reposition();
@@ -137,11 +155,15 @@ public class FishingGame : IClickableMenu
     {
         xPositionOnScreen = (Game1.uiViewport.Width - width) / 2;
         yPositionOnScreen = (Game1.uiViewport.Height - height) / 2;
+
+        Selector.X = xPositionOnScreen + width - Selector.Width - 32;
+        Selector.Y = yPositionOnScreen + 32;
     }
 
     public override void update(GameTime time)
     {
         onTick();
+        Selector.onTick();
 
         if (isPaused) return;
 
@@ -210,6 +232,8 @@ public class FishingGame : IClickableMenu
 
         // Background
         b.Draw(Background, new Vector2(X, Y), new Rectangle(0, 0, 320, 180), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0);
+
+        Selector.Draw(b);
 
         // Position BobberBar
         var X_BB = X + 64;
@@ -295,24 +319,7 @@ public class FishingGame : IClickableMenu
         b.DrawString(Game1.dialogueFont, Fish.Item.DisplayName, new Vector2(X_Info, Y_Info), Color.Black);
         Y_Info += 40;
         // Fish Motion Type
-        switch (Fish.Item.Type)
-        {
-            case MotionType.Mixed:
-                b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_MotionType_Mixed(), new Vector2(X_Info, Y_Info), Color.DarkBlue);
-                break;
-            case MotionType.Dart:
-                b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_MotionType_Dart(), new Vector2(X_Info, Y_Info), Color.DarkBlue);
-                break;
-            case MotionType.Smooth:
-                b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_MotionType_Smooth(), new Vector2(X_Info, Y_Info), Color.DarkBlue);
-                break;
-            case MotionType.Floater:
-                b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_MotionType_Floater(), new Vector2(X_Info, Y_Info), Color.DarkBlue);
-                break;
-            case MotionType.Sinker:
-                b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_MotionType_Sinker(), new Vector2(X_Info, Y_Info), Color.DarkBlue);
-                break;
-        }
+        b.DrawString(Game1.dialogueFont, Fish.Item.Type.ToString(), new Vector2(X_Info, Y_Info), Color.DarkBlue);
         Y_Info += 40;
         // Fish Difficulty
         b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Difficulty(Bobber.Difficulty, Fish.Item.Difficulty), new Vector2(X_Info, Y_Info), Color.Black);

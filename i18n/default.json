@@ -44,17 +44,17 @@
   "ExBobberBar.Paused": "Paused",
   "ExBobberBar.Running": "Running",
 
-  "ExBobberBar.MotionType.Mixed": "Mixed",
-  "ExBobberBar.MotionType.Dart": "Dart",
-  "ExBobberBar.MotionType.Smooth": "Smooth",
-  "ExBobberBar.MotionType.Floater": "Floater",
-  "ExBobberBar.MotionType.Sinker": "Sinker",
-
   "ExBobberBar.Difficulty": "Difficulty: {{ actual }} ({{ origin }})",
   "ExBobberBar.Size": "Size: {{ size }} [{{ minSize }}, {{ maxSize }}]",
   "ExBobberBar.Perfect": "Perfect",
 
   "ExBobberBar.Chance.Veer": "Veer Chance: {{ chance }}",
   "ExBobberBar.Chance.Dart": "Dart Chance: {{ chance }}",
-  "ExBobberBar.Chance.QuickDart": "QuickDart Chance: {{ chance }}"
+  "ExBobberBar.Chance.QuickDart": "QuickDart Chance: {{ chance }}",
+
+  "MotionType.Mixed": "Mixed",
+  "MotionType.Dart": "Dart",
+  "MotionType.Smooth": "Smooth",
+  "MotionType.Floater": "Floater",
+  "MotionType.Sinker": "Sinker"
 }

@@ -1,0 +1,53 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using StardewValley;
+
+public class TextureSlice
+{
+    public readonly Texture2D Texture;
+    public readonly Rectangle Source;
+    public readonly Vector2 Origin;
+    public readonly float Scale;
+
+    public TextureSlice(Texture2D texture, Rectangle src, Vector2 origin, float scale)
+    {
+        Texture = texture;
+        Source = src;
+        Origin = origin;
+        Scale = scale;
+    }
+
+    public void Draw(SpriteBatch b, Vector2 position, Color color, float rotation = 0)
+    {
+        b.Draw(Texture, position, Source, color, rotation, Origin, Scale, SpriteEffects.None, 0);
+    }
+
+    public void Draw(SpriteBatch b, Vector2 position, Color color, Vector2 scale)
+    {
+        b.Draw(Texture, position, Source, color, 0, Origin, scale, SpriteEffects.None, 0);
+    }
+}
+
+public abstract class Widget
+{
+    public int X;
+    public int Y;
+    public int Width;
+    public int Height;
+
+    public abstract void onTick();
+
+    public abstract void Draw(SpriteBatch b);
+
+    public static void Rect(SpriteBatch b, int x, int y, int width, int height, Color color)
+    {
+        b.Draw(Game1.staminaRect, new Rectangle(x, y, width, height), color);
+    }
+
+    public static float Text(SpriteBatch b, float x, float y, string text, Color color)
+    {
+        var deltaX = Game1.smallFont.MeasureString(text).X;
+        b.DrawString(Game1.smallFont, text, new Vector2(x, y), color);
+        return deltaX;
+    }
+}

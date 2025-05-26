@@ -1,3 +1,5 @@
+using FishingTrainer;
+
 public enum MotionType
 {
     Mixed,
@@ -25,6 +27,25 @@ public static class MotionTypeExtension
                 return MotionType.Sinker;
             default:
                 throw new FormatException(motionType);
+        }
+    }
+
+    public static string ToString(this MotionType motionType)
+    {
+        switch (motionType)
+        {
+            case MotionType.Mixed:
+                return I18n.MotionType_Mixed();
+            case MotionType.Dart:
+                return I18n.MotionType_Dart();
+            case MotionType.Smooth:
+                return I18n.MotionType_Smooth();
+            case MotionType.Floater:
+                return I18n.MotionType_Floater();
+            case MotionType.Sinker:
+                return I18n.MotionType_Sinker();
+            default:
+                throw new NotImplementedException();
         }
     }
 }
