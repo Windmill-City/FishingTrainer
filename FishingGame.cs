@@ -209,14 +209,14 @@ public class FishingGame : IClickableMenu
         var Y = yPositionOnScreen;
 
         // Background
-        b.Draw(Background, new Vector2(X, Y), new Rectangle(0, 0, 320, 180), Color.White, 0.0f, new Vector2(0, 0), 4f, SpriteEffects.None, 0.99f);
+        b.Draw(Background, new Vector2(X, Y), new Rectangle(0, 0, 320, 180), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0);
 
         // Position BobberBar
         var X_BB = X + 64;
         var Y_BB = Y + 32;
 
         // BobberBar
-        b.Draw(Game1.mouseCursors, new Vector2(X_BB, Y_BB), new Rectangle(644, 1999, 38, 150), Color.White, 0.0f, new Vector2(0, 0), 4f, SpriteEffects.None, 0.98f);
+        b.Draw(Game1.mouseCursors, new Vector2(X_BB, Y_BB), new Rectangle(644, 1999, 38, 150), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0);
 
         // Progress LeftTop
         var X_PL = X_BB + 32 * 4;
@@ -232,9 +232,9 @@ public class FishingGame : IClickableMenu
         //BobberBar
         var BarShake = BobberInBar || TreasureInBar ? Vector2.Zero : BobberBar.Shaker.Shake;
         var BarColor = BobberInBar || TreasureInBar ? Color.White : (Color.White * 0.25f * ((float)Math.Round(Math.Sin(Game1.currentGameTime.TotalGameTime.TotalMilliseconds / 100.0), 2) + 2f));
-        b.Draw(Game1.mouseCursors, new Vector2(X_BL, Y_BT + (int)BobberBar.Position) + BarShake, new Rectangle(682, 2078, 9, 2), BarColor, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.89f);
-        b.Draw(Game1.mouseCursors, new Vector2(X_BL, Y_BT + (int)BobberBar.Position + 8) + BarShake, new Rectangle(682, 2081, 9, 1), BarColor, 0f, Vector2.Zero, new Vector2(4f, BobberBar.Height - 16), SpriteEffects.None, 0.89f);
-        b.Draw(Game1.mouseCursors, new Vector2(X_BL, Y_BT + (int)BobberBar.Position + BobberBar.Height - 8) + BarShake, new Rectangle(682, 2085, 9, 2), BarColor, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.89f);
+        b.Draw(Game1.mouseCursors, new Vector2(X_BL, Y_BT + (int)BobberBar.Position) + BarShake, new Rectangle(682, 2078, 9, 2), BarColor, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0);
+        b.Draw(Game1.mouseCursors, new Vector2(X_BL, Y_BT + (int)BobberBar.Position + 8) + BarShake, new Rectangle(682, 2081, 9, 1), BarColor, 0f, Vector2.Zero, new Vector2(4f, BobberBar.Height - 16), SpriteEffects.None, 0);
+        b.Draw(Game1.mouseCursors, new Vector2(X_BL, Y_BT + (int)BobberBar.Position + BobberBar.Height - 8) + BarShake, new Rectangle(682, 2085, 9, 2), BarColor, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0);
 
         if (ModEntry.Config.ShowDebugHints)
         {
@@ -248,7 +248,7 @@ public class FishingGame : IClickableMenu
         {
             // Treasure
             var TreasureShake = TreasureInBar ? Treasure.Shaker.Shake : Vector2.Zero;
-            b.Draw(Game1.mouseCursors, new Vector2(X_BL, Y_BT + Treasure.Position) + TreasureShake, new Rectangle(638, 1865, 20, 24), Color.White, 0f, new Vector2(2f, 0f), 2f, SpriteEffects.None, 0.85f);
+            b.Draw(Game1.mouseCursors, new Vector2(X_BL, Y_BT + Treasure.Position) + TreasureShake, new Rectangle(638, 1865, 20, 24), Color.White, 0f, new Vector2(2f, 0f), 2f, SpriteEffects.None, 0);
 
             if (ModEntry.Config.ShowDebugHints)
             {
@@ -267,7 +267,7 @@ public class FishingGame : IClickableMenu
 
         //Bobber
         var BobberShake = BobberInBar ? Bobber.Shaker.Shake : Vector2.Zero;
-        b.Draw(Game1.mouseCursors, new Vector2(X_BL, Y_BT + Bobber.Position) + BobberShake, new Rectangle(614, 1840, 20, 20), Color.White, 0f, new Vector2(1f, 1f), 2f, SpriteEffects.None, 0.88f);
+        b.Draw(Game1.mouseCursors, new Vector2(X_BL, Y_BT + Bobber.Position) + BobberShake, new Rectangle(614, 1840, 20, 20), Color.White, 0f, new Vector2(1f, 1f), 2f, SpriteEffects.None, 0);
 
         if (ModEntry.Config.ShowDebugHints)
         {
@@ -278,13 +278,13 @@ public class FishingGame : IClickableMenu
         }
 
         // Reel
-        b.Draw(Game1.mouseCursors, new Vector2(X_BB + 5.5f * 4, Y_BB + 128.5f * 4), new Rectangle(257, 1990, 5, 10), Color.White, Reel.ReelRotation, new Vector2(2.5f, 9.5f), 4f, SpriteEffects.None, 0.9f);
+        b.Draw(Game1.mouseCursors, new Vector2(X_BB + 5.5f * 4, Y_BB + 128.5f * 4), new Rectangle(257, 1990, 5, 10), Color.White, Reel.ReelRotation, new Vector2(2.5f, 9.5f), 4f, SpriteEffects.None, 0);
 
         var X_Info = X + 256;
         var Y_Info = Y + 32;
 
         // Sonar Background
-        b.Draw(Game1.mouseCursors_1_6, new Vector2(X_Info, Y_Info), new Rectangle(227, 6, 29, 24), Color.White, 0f, new Vector2(10f, 0f), 4f, SpriteEffects.None, 0.88f);
+        b.Draw(Game1.mouseCursors_1_6, new Vector2(X_Info, Y_Info), new Rectangle(227, 6, 29, 24), Color.White, 0f, new Vector2(10f, 0f), 4f, SpriteEffects.None, 0);
         // Fish Object
         Fish.Item.Draw(b, new Vector2(X_Info, Y_Info + 16));
 
