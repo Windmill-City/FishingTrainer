@@ -7,7 +7,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 
-class FishingGame : IClickableMenu
+public class FishingGame : IClickableMenu
 {
     public static Texture2D? Background;
 

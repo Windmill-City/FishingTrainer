@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using StardewValley;
 
-class Shaker
+public class Shaker
 {
     public int Min;
     public int Max;

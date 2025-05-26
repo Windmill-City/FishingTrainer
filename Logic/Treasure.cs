@@ -1,7 +1,7 @@
 using FishingTrainer;
 using StardewValley;
 
-class Treasure
+public class Treasure
 {
     public static Shaker Shaker = new Shaker(-3, 2, 1f);
 

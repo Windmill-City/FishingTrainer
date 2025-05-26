@@ -1,6 +1,6 @@
 using FishingTrainer;
 
-class BarbedHook
+public class BarbedHook
 {
     public FishingGame Context;
 

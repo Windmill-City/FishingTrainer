@@ -1,7 +1,7 @@
 using FishingTrainer;
 using StardewValley;
 
-class BobberBar
+public class BobberBar
 {
     public static Shaker Shaker = new Shaker(-10, 11, 10f);
 

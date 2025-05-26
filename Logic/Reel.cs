@@ -2,7 +2,7 @@ using FishingTrainer;
 using Microsoft.Xna.Framework.Audio;
 using StardewValley;
 
-class Reel
+public class Reel
 {
     public FishingGame Context;
     public ICue? ReelSound = null;

@@ -1,6 +1,6 @@
 using FishingTrainer;
 
-class Fish
+public class Fish
 {
     public const int TimePerFishSizeReduction = 800;
 

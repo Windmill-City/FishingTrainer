@@ -1,4 +1,4 @@
-class FloaterSinker
+public class FloaterSinker
 {
     public const float DeltaPerTick = 0.01f;
     public const float AccelerationMax = 1.5f;

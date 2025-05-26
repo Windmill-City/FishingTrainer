@@ -1,7 +1,7 @@
 using FishingTrainer;
 using StardewValley;
 
-class Catch
+public class Catch
 {
     public const float ProgressIncPerTick = 0.002f;
 
