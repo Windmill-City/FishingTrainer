@@ -27,11 +27,17 @@ public class UiFishSelector : Widget
 
     public UiFishSelector()
     {
-        Width = 400;
-        Height = RowHeight * 15;
-
         Fishes = FishItems.GetFishItems();
         ActiveFish = FishItems.GetPreviousFishItem();
+
+        Width = 0;
+        Height = RowHeight * 15;
+
+        // layout
+        foreach (var fish in Fishes)
+        {
+            Width = Math.Max(deltaX($"{fish.DisplayName}({fish.Difficulty}){fish.Type}"), Width);
+        }
     }
 
     public override void Draw(SpriteBatch b)
@@ -42,7 +48,7 @@ public class UiFishSelector : Widget
         {
             fish.Draw(b, new Vector2(X_Offset, Y_Offset - 16), 0.5f);
 
-            var deltaX = 48f;
+            int deltaX = 48;
             // DisplayName
             deltaX += Text(b, X_Offset + deltaX, Y_Offset, fish.DisplayName, Color.Black);
             // Difficulty

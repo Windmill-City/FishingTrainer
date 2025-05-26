@@ -44,10 +44,15 @@ public abstract class Widget
         b.Draw(Game1.staminaRect, new Rectangle(x, y, width, height), color);
     }
 
-    public static float Text(SpriteBatch b, float x, float y, string text, Color color)
+    public static int Text(SpriteBatch b, float x, float y, string text, Color color)
     {
         var deltaX = Game1.smallFont.MeasureString(text).X;
         b.DrawString(Game1.smallFont, text, new Vector2(x, y), color);
-        return deltaX;
+        return (int)deltaX;
+    }
+
+    public static int deltaX(string text)
+    {
+        return (int)Game1.smallFont.MeasureString(text).X;
     }
 }
