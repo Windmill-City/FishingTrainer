@@ -3,16 +3,16 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 
-public class FishObject
+public class FishItem
 {
-    private Item Obj;
+    private Item Internal;
 
-    public string ItemId => Obj.ItemId;
+    public string ItemId => Internal.ItemId;
 
     public int Difficulty;
     public MotionType Type;
 
-    public string DisplayName => Obj.DisplayName;
+    public string DisplayName => Internal.DisplayName;
 
     private int _size = 0;
     public int Size
@@ -26,8 +26,8 @@ public class FishObject
 
     public int Quality
     {
-        get => Obj.Quality;
-        set => Obj.Quality = value;
+        get => Internal.Quality;
+        set => Internal.Quality = value;
     }
 
     public bool isBossFish
@@ -35,14 +35,14 @@ public class FishObject
         get
         {
             bool bossFish;
-            Obj.TryGetTempData("IsBossFish", out bossFish);
+            Internal.TryGetTempData("IsBossFish", out bossFish);
             return bossFish;
         }
     }
 
-    public FishObject(Item fishObject, MotionType motionType, int difficulty, int minSize, int maxSize)
+    public FishItem(Item fishObject, MotionType motionType, int difficulty, int minSize, int maxSize)
     {
-        Obj = fishObject;
+        Internal = fishObject;
         Type = motionType;
         Difficulty = difficulty;
         SizeMin = minSize;
@@ -54,18 +54,18 @@ public class FishObject
         var RandomSizeBase = Game1.random.NextDouble();
 
         Size = (int)(SizeMin + (SizeMax - SizeMin) * RandomSizeBase) + 1;
-        Obj.Quality = (!(RandomSizeBase < 0.33)) ? (RandomSizeBase < 0.66 ? 1 : 2) : 0;
+        Internal.Quality = (!(RandomSizeBase < 0.33)) ? (RandomSizeBase < 0.66 ? 1 : 2) : 0;
     }
 
     public void Draw(SpriteBatch b, Vector2 position)
     {
-        Obj.drawInMenu(b, position, 1f);
+        Internal.drawInMenu(b, position, 1f);
     }
 }
 
 public static class FishContent
 {
-    public static Dictionary<MotionType, List<FishObject>> GetFishContents()
+    public static Dictionary<MotionType, List<FishItem>> GetFishItems()
     {
         return DataLoader.Fish(Game1.content)
         .Select(kvp =>
@@ -81,7 +81,7 @@ public static class FishContent
             return new
             {
                 Key = type,
-                Value = new FishObject(
+                Value = new FishItem(
                     ItemRegistry.Create(rawData[0]),
                     type,
                     Convert.ToInt32(rawData[2]),
@@ -94,17 +94,17 @@ public static class FishContent
         .ToDictionary(g => g.Key, g => g.Select(i => i.Value).OrderBy(i => i.Difficulty).ToList());
     }
 
-    public static FishObject GetDefaultFishObject()
+    public static FishItem GetDefaultFishItem()
     {
-        return GetFishContents()[MotionType.Smooth].First();
+        return GetFishItems()[MotionType.Smooth].First();
     }
 
-    public static FishObject GetPreviousFishObject()
+    public static FishItem GetPreviousFishItem()
     {
-        return GetFishContents()
+        return GetFishItems()
         .Values
         .SelectMany(i => i)
         .Where(i => i.ItemId == ModEntry.Config.PreviousFishId)
-        .FirstOrDefault(GetDefaultFishObject());
+        .FirstOrDefault(GetDefaultFishItem());
     }
 }

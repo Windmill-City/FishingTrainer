@@ -15,7 +15,7 @@ class Bobber
     public const float DartPositionMax = 100;
     public const float VelocitySmoothingFactor = 5f;
 
-    public MotionType motionType => Context.Fish.Obj.Type;
+    public MotionType motionType => Context.Fish.Item.Type;
     public bool isSlidingOrStill = true;
     public float Velocity = 0;
     public float Acceleration = 0;
@@ -149,18 +149,18 @@ class Bobber
             if (ModEntry.Config.hasBlessingOfWaters)
             {
 
-                if (Context.Fish.Obj.isBossFish)
+                if (Context.Fish.Item.isBossFish)
                 {
-                    return Context.Fish.Obj.Difficulty * 0.75f;
+                    return Context.Fish.Item.Difficulty * 0.75f;
                 }
                 else
                 {
-                    return Context.Fish.Obj.Difficulty * 0.5f;
+                    return Context.Fish.Item.Difficulty * 0.5f;
                 }
             }
             else
             {
-                return Context.Fish.Obj.Difficulty;
+                return Context.Fish.Item.Difficulty;
             }
         }
     }

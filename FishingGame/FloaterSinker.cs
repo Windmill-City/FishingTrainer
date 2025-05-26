@@ -24,7 +24,7 @@ class FloaterSinker
 
     public void onTick()
     {
-        switch (Context.Fish.Obj.Type)
+        switch (Context.Fish.Item.Type)
         {
             case MotionType.Sinker:
                 Acceleration += DeltaPerTick;

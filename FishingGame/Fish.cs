@@ -6,7 +6,7 @@ class Fish
 
     public FishingGame Context;
 
-    public FishObject Obj;
+    public FishItem Item;
 
     public int FishSizeReductionTimer;
 
@@ -14,14 +14,14 @@ class Fish
     public Fish(FishingGame game)
     {
         Context = game;
-        Obj = FishContent.GetPreviousFishObject();
+        Item = FishContent.GetPreviousFishItem();
         Reset();
     }
 
     public void Reset()
     {
         FishSizeReductionTimer = TimePerFishSizeReduction;
-        Obj.RandomSize();
+        Item.RandomSize();
     }
 
     public void onTick()
@@ -34,7 +34,7 @@ class Fish
             FishSizeReductionTimer--;
             if (FishSizeReductionTimer == 0)
             {
-                Obj.Size -= 1;
+                Item.Size -= 1;
                 FishSizeReductionTimer = TimePerFishSizeReduction;
             }
         }
