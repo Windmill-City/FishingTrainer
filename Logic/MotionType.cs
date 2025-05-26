@@ -13,7 +13,7 @@ public static class MotionTypeExtension
 {
     public static MotionType asMotionType(this string motionType)
     {
-        switch (motionType)
+        switch (motionType.ToLower())
         {
             case "mixed":
                 return MotionType.Mixed;

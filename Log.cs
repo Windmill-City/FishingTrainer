@@ -15,6 +15,10 @@ public static class Log
     {
         ModEntry.Instance!.Monitor.Log(message, LogLevel.Info);
     }
+    public static void WarnOnce(string message)
+    {
+        ModEntry.Instance!.Monitor.LogOnce(message, LogLevel.Warn);
+    }
     public static void Warn(string message)
     {
         ModEntry.Instance!.Monitor.Log(message, LogLevel.Warn);

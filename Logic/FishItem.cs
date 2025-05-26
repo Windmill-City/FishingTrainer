@@ -77,15 +77,24 @@ public static class FishItems
         .Where(i => i[2] != "trap") // filter object catch by Crab Pot
         .Select(rawData =>
         {
-            MotionType type = rawData[3].asMotionType();
-            return new FishItem(
+            try
+            {
+                MotionType type = rawData[3].asMotionType();
+                return new FishItem(
                     ItemRegistry.Create(rawData[0]),
                     type,
                     Convert.ToInt32(rawData[2]),
                     Convert.ToInt32(rawData[4]),
                     Convert.ToInt32(rawData[5])
                 );
+            }
+            catch (Exception)
+            {
+                Log.WarnOnce($"Unable to parse fish: {string.Join("/", rawData)}");
+                return null;
+            }
         })
+        .OfType<FishItem>()
         .OrderBy(i => i.Difficulty)
         .ThenBy(i => i.Type)
         .ThenBy(i => i.DisplayName)
