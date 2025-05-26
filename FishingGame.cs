@@ -16,8 +16,6 @@ class FishingGame : IClickableMenu
     public bool isPaused = true;
     public int PauseTimer = 0;
 
-    public bool isPerfect = true;
-
     public FloaterSinker FloaterSinker;
     public Fish Fish;
     public Reel Reel;
@@ -197,15 +195,12 @@ class FishingGame : IClickableMenu
     public void Reset()
     {
         isPaused = true;
-        isPerfect = true;
 
+        Fish.Reset();
+        Catch.Reset();
         Bobber.Reset();
         BobberBar.Reset();
-
         Treasure.Reset();
-
-        Catch.Reset();
-        Fish.Reset();
     }
 
     public override void draw(SpriteBatch b)
@@ -291,16 +286,16 @@ class FishingGame : IClickableMenu
         // Sonar Background
         b.Draw(Game1.mouseCursors_1_6, new Vector2(X_Info, Y_Info), new Rectangle(227, 6, 29, 24), Color.White, 0f, new Vector2(10f, 0f), 4f, SpriteEffects.None, 0.88f);
         // Fish Object
-        Fish.Content.fishObject.drawInMenu(b, new Vector2(X_Info, Y_Info + 16), 1);
+        Fish.Obj.Draw(b, new Vector2(X_Info, Y_Info + 16));
 
         X_Info -= 16;
         Y_Info += 128;
 
         // Fish Display Name
-        b.DrawString(Game1.dialogueFont, Fish.Content.fishObject.DisplayName, new Vector2(X_Info, Y_Info), Color.Black);
+        b.DrawString(Game1.dialogueFont, Fish.Obj.DisplayName, new Vector2(X_Info, Y_Info), Color.Black);
         Y_Info += 40;
         // Fish Motion Type
-        switch (Fish.Content.motionType)
+        switch (Fish.Obj.Type)
         {
             case MotionType.Mixed:
                 b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_MotionType_Mixed(), new Vector2(X_Info, Y_Info), Color.DarkBlue);
@@ -320,14 +315,14 @@ class FishingGame : IClickableMenu
         }
         Y_Info += 40;
         // Fish Difficulty
-        b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Difficulty(Bobber.Difficulty, Fish.Content.difficulty), new Vector2(X_Info, Y_Info), Color.Black);
+        b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Difficulty(Bobber.Difficulty, Fish.Obj.Difficulty), new Vector2(X_Info, Y_Info), Color.Black);
         Y_Info += 40;
         // Fish Size
-        b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Size(Fish.Size, Fish.Content.minSize, Fish.Content.maxSize), new Vector2(X_Info, Y_Info), Color.Black);
+        b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Size(Fish.Obj.Size, Fish.Obj.SizeMin, Fish.Obj.SizeMax), new Vector2(X_Info, Y_Info), Color.Black);
         Y_Info += 40;
 
         // Perfect
-        b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Perfect(), new Vector2(X_Info, Y_Info), isPerfect ? Color.Orange : Color.Black);
+        b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Perfect(), new Vector2(X_Info, Y_Info), Catch.isPerfect ? Color.Orange : Color.Black);
         Y_Info += 40;
 
         // Status

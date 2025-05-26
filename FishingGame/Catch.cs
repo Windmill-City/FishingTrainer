@@ -1,6 +1,5 @@
 using FishingTrainer;
 using StardewValley;
-using StardewValley.Characters;
 
 class Catch
 {
@@ -9,6 +8,7 @@ class Catch
     public FishingGame Context;
 
     public bool isCaught;
+    public bool isPerfect;
 
     private float _catchProgress;
     public float CatchProgress
@@ -54,6 +54,7 @@ class Catch
     public void Reset()
     {
         isCaught = false;
+        isPerfect = true;
         CatchProgress = 0.3f;
     }
 
@@ -63,7 +64,7 @@ class Catch
 
         CatchProgress += Context.BobberInBar ? ProgressIncPerTick : ProgressDecPerTick;
 
-        // Just Zero
+        // just Zero
         if (CatchProgress == 0 && prvCatchProgress > 0)
         {
             if (ModEntry.Config.EscapeSound)
@@ -74,12 +75,18 @@ class Catch
         {
             // minor reset - for better experience in non-full reset mode
             CatchProgress = 0.3f;
-            Context.isPerfect = true;
+            isPerfect = true;
 
             isCaught = true;
 
             if (ModEntry.Config.CaughtSound)
                 Game1.playSound("jingle1");
         }
+
+        // perfect conditions
+        if (Context.BobberInBar) return;
+        if (ModEntry.Config.hasTreasureHunter && Context.TreasureInBar) return;
+
+        isPerfect = false;
     }
 }

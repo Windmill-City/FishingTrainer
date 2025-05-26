@@ -9,7 +9,7 @@ public enum MotionType
 
 public static class MotionTypeExtension
 {
-    public static MotionType? asMotionType(this string motionType)
+    public static MotionType asMotionType(this string motionType)
     {
         switch (motionType)
         {
@@ -24,7 +24,7 @@ public static class MotionTypeExtension
             case "sinker":
                 return MotionType.Sinker;
             default:
-                return null;
+                throw new FormatException(motionType);
         }
     }
 }
