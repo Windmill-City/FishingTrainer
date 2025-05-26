@@ -15,7 +15,7 @@ class Bobber
     public const float DartPositionMax = 100;
     public const float VelocitySmoothingFactor = 5f;
 
-    public MotionType motionType => Context.Fish.Item.Type;
+    public MotionType Type => Context.Fish.Item.Type;
     public bool isSlidingOrStill = true;
     public float Velocity = 0;
     public float Acceleration = 0;
@@ -29,7 +29,7 @@ class Bobber
     {
         get
         {
-            if (motionType == MotionType.Smooth)
+            if (Type == MotionType.Smooth)
                 return Difficulty * 20 / 4000f;
             else// Mixed/Dart/Floater/Sinker
                 return Difficulty / 4000f;
@@ -40,7 +40,7 @@ class Bobber
     {
         get
         {
-            if (motionType == MotionType.Smooth)
+            if (Type == MotionType.Smooth)
                 return 0;
             else// Mixed/Dart/Floater/Sinker
                 return Difficulty / 2000f;
@@ -51,7 +51,7 @@ class Bobber
     {
         get
         {
-            if (motionType == MotionType.Mixed)
+            if (Type == MotionType.Mixed)
                 return Difficulty / 1000f;
             else// Smooth/Dart/Floater/Sinker
                 return 0;
@@ -63,7 +63,7 @@ class Bobber
         get
         {
             // Smooth type doesn't veers when it is moving
-            if (motionType == MotionType.Smooth && !isSlidingOrStill)
+            if (Type == MotionType.Smooth && !isSlidingOrStill)
                 return false;
             else
                 return Game1.random.NextDouble() < ChanceVeer;
