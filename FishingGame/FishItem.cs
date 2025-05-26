@@ -63,7 +63,7 @@ public class FishItem
     }
 }
 
-public static class FishContent
+public static class FishItems
 {
     public static Dictionary<MotionType, List<FishItem>> GetFishItems()
     {
