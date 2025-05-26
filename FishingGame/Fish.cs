@@ -14,7 +14,7 @@ class Fish
     public Fish(FishingGame game)
     {
         Context = game;
-        Obj = FishContent.GetDefaultFishObject();
+        Obj = FishContent.GetPreviousFishObject();
         Reset();
     }
 

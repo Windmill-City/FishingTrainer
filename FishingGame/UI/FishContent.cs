@@ -1,3 +1,4 @@
+using FishingTrainer;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
@@ -5,6 +6,8 @@ using StardewValley;
 public class FishObject
 {
     private Item Obj;
+
+    public string ItemId => Obj.ItemId;
 
     public int Difficulty;
     public MotionType Type;
@@ -94,5 +97,14 @@ public static class FishContent
     public static FishObject GetDefaultFishObject()
     {
         return GetFishContents()[MotionType.Smooth].First();
+    }
+
+    public static FishObject GetPreviousFishObject()
+    {
+        return GetFishContents()
+        .Values
+        .SelectMany(i => i)
+        .Where(i => i.ItemId == ModEntry.Config.PreviousFishId)
+        .FirstOrDefault(GetDefaultFishObject());
     }
 }

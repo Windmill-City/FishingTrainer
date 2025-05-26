@@ -2,6 +2,8 @@ using StardewModdingAPI.Utilities;
 
 public sealed class ModConfig
 {
+    public string PreviousFishId = "";
+
     public KeybindList OpenFishingGame { get; set; } = KeybindList.Parse("F8");
     public KeybindList ResetFishingGame { get; set; } = KeybindList.Parse("F9");
 
