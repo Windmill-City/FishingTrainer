@@ -35,15 +35,7 @@ public class FishingGame : IClickableMenu
 
             if (Input.GetState(SButton.MouseLeft) == SButtonState.Held)
             {
-                // Position BobberBar
-                var X_BB = xPositionOnScreen + 64;
-                var Y_BB = yPositionOnScreen + 32;
-
-                var Cursor = Input.GetCursorPosition().GetScaledScreenPixels();
-
-                // in BobberBar Area?
-                return Cursor.X >= X_BB && Cursor.X <= X_BB + 38 * 4
-                        && Cursor.Y >= Y_BB && Cursor.Y <= Y_BB + 150 * 4;
+                return !Selector.inWidgetArea;
             }
 
             if (Game1.isOneOfTheseKeysDown(Game1.oldKBState, Game1.options.useToolButton))

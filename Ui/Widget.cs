@@ -1,3 +1,4 @@
+using FishingTrainer;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
@@ -34,6 +35,16 @@ public abstract class Widget
     public int Y;
     public int Width;
     public int Height;
+
+    public bool inWidgetArea
+    {
+        get
+        {
+            var Input = ModEntry.Instance!.Helper.Input;
+            var Cursor = Input.GetCursorPosition().GetScaledScreenPixels();
+            return Cursor.X >= X && Cursor.Y >= Y && Cursor.X <= X + Width && Cursor.Y <= Y + Height;
+        }
+    }
 
     public abstract void onTick();
 

@@ -76,7 +76,7 @@ public class UiFishSelector : Widget
             var Cursor = Input.GetCursorPosition().GetScaledScreenPixels();
 
             // is in selector area?
-            if (Cursor.X >= X && Cursor.Y >= Y && Cursor.X <= X + Width && Cursor.Y <= Y + Height)
+            if (inWidgetArea)
             {
                 var Index = (int)(ScrollPos + (Cursor.Y - Y) / RowHeight);
                 if (Index < Fishes.Count)
