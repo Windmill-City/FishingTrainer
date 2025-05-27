@@ -90,7 +90,8 @@ public class BobberBar
 
         if (justHitTop || justHitBottom)
         {
-            Velocity = -Velocity * 2f / 3f;
+            // fix bar glitch when hit bottom
+            Velocity = Math.Abs(Velocity) < 1 ? 0 : (-Velocity * 2f / 3f);
             Game1.playSound("shiny4");
         }
 
