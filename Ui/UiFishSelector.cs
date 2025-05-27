@@ -53,7 +53,7 @@ public class UiFishSelector : Widget
 
             int deltaX = 48;
             // DisplayName
-            deltaX += Text(b, X_Offset + deltaX, Y_Offset, fish.DisplayName, Color.Black);
+            deltaX += Text(b, X_Offset + deltaX, Y_Offset, fish.DisplayName, fish.isBossFish ? Color.OrangeRed : Color.Black);
             // Difficulty
             deltaX += Text(b, X_Offset + deltaX, Y_Offset, $"({fish.Difficulty})", Color.DarkMagenta);
             // MotionType
@@ -68,23 +68,19 @@ public class UiFishSelector : Widget
     {
         var Input = ModEntry.Instance!.Helper.Input;
 
-        if (Input.GetState(SButton.MouseLeft) == SButtonState.Held)
+        if (Input.GetState(SButton.MouseLeft) == SButtonState.Pressed)
         {
             var Cursor = Input.GetCursorPosition().ScreenPixels;
-            Log.Debug($"Cursor: {Cursor.X}, {Cursor.Y}");
 
             // is in selector area?
             if (Cursor.X >= X && Cursor.Y >= Y && Cursor.X <= X + Width && Cursor.Y <= Y + Height)
             {
                 var Index = (int)(ScrollPos + (Cursor.Y - Y) / RowHeight);
-                Log.Debug($"Index: {Index}, Count: {Fishes.Count}");
-
                 if (Index < Fishes.Count)
                 {
                     ActiveFish = Fishes[Index].DeepClone();
 
                     ModEntry.Config.PreviousFishId = ActiveFish.ItemId;
-                    ModEntry.Instance!.Helper.WriteConfig(ModEntry.Config);
 
                     OnFishSelected?.Invoke(this, new EventArgs());
                 }

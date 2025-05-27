@@ -1,11 +1,25 @@
+using FishingTrainer;
 using StardewModdingAPI.Utilities;
 
 public sealed class ModConfig
 {
-    public string PreviousFishId = "";
 
     public KeybindList OpenFishingGame { get; set; } = KeybindList.Parse("F8");
     public KeybindList ResetFishingGame { get; set; } = KeybindList.Parse("F9");
+
+    private string _previousFishId = "";
+    public string PreviousFishId
+    {
+        get => _previousFishId;
+        set
+        {
+            if (value != _previousFishId)
+            {
+                _previousFishId = value;
+                ModEntry.Instance!.Helper.WriteConfig(ModEntry.Config);
+            }
+        }
+    }
 
     public bool ResetOnCaught = false;
 

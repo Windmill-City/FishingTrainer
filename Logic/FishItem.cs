@@ -2,6 +2,7 @@ using FishingTrainer;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
+using StardewValley.GameData.Locations;
 
 public class FishItem
 {
@@ -30,19 +31,12 @@ public class FishItem
         set => Internal.Quality = value;
     }
 
-    public bool isBossFish
-    {
-        get
-        {
-            bool bossFish;
-            Internal.TryGetTempData("IsBossFish", out bossFish);
-            return bossFish;
-        }
-    }
+    public bool isBossFish { get; internal set; }
 
-    public FishItem(Item fishObject, MotionType motionType, int difficulty, int minSize, int maxSize)
+    public FishItem(Item fishObject, bool bossFish, MotionType motionType, int difficulty, int minSize, int maxSize)
     {
         Internal = fishObject;
+        isBossFish = bossFish;
         Type = motionType;
         Difficulty = difficulty;
         SizeMin = minSize;
@@ -65,8 +59,32 @@ public class FishItem
 
 public static class FishItems
 {
+    public static List<LocationData> GetLocations()
+    {
+        return Game1.locationData.Values.ToList();
+    }
+
+    public static List<SpawnFishData> GetSpawnFishData()
+    {
+        return GetLocations().SelectMany(loc =>
+        {
+            return loc.Fish;
+        }).ToList();
+    }
+
+    public static List<string> GetBossFishes()
+    {
+        return GetSpawnFishData().Where(i => i.IsBossFish).Select(i =>
+        {
+            return i.ItemId.StartsWith("(O)") ? i.ItemId.Substring(3) : i.ItemId;
+        }).ToList();
+    }
+
+
     public static List<FishItem> GetFishItems()
     {
+        var BossFishes = GetBossFishes();
+
         return DataLoader.Fish(Game1.content)
         .Select(kvp =>
         {
@@ -82,6 +100,7 @@ public static class FishItems
                 MotionType type = rawData[3].asMotionType();
                 return new FishItem(
                     ItemRegistry.Create(rawData[0]),
+                    BossFishes.Contains(rawData[0]),
                     type,
                     Convert.ToInt32(rawData[2]),
                     Convert.ToInt32(rawData[4]),
