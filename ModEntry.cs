@@ -15,6 +15,7 @@ public class ModEntry : Mod
     {
         Instance = this;
         I18n.Init(helper.Translation);
+        Config = helper.ReadConfig<ModConfig>();
         helper.Events.GameLoop.GameLaunched += OnGameLaunched;
         helper.Events.Input.ButtonsChanged += OnButtonsChanged;
     }
