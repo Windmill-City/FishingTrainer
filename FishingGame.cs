@@ -316,7 +316,10 @@ public class FishingGame : IClickableMenu
         Y_Info += 128;
 
         // Fish Display Name
-        b.DrawString(Game1.dialogueFont, Fish.Item.DisplayName, new Vector2(X_Info, Y_Info), Fish.Item.isBossFish ? Color.OrangeRed : Color.Black);
+        if (ModEntry.Config.ShowDebugHints)
+            b.DrawString(Game1.dialogueFont, $"{Fish.Item.DisplayName}({Fish.Item.ItemId})", new Vector2(X_Info, Y_Info), Fish.Item.isBossFish ? Color.OrangeRed : Color.Black);
+        else
+            b.DrawString(Game1.dialogueFont, Fish.Item.DisplayName, new Vector2(X_Info, Y_Info), Fish.Item.isBossFish ? Color.OrangeRed : Color.Black);
         Y_Info += 40;
         // Fish Motion Type
         b.DrawString(Game1.dialogueFont, Fish.Item.Type.asString(), new Vector2(X_Info, Y_Info), Color.DarkBlue);

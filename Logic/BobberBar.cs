@@ -67,7 +67,7 @@ public class BobberBar
 
         if (Context.BobberInBar)
         {
-            Acceleration *= 0.5f;
+            Acceleration *= 0.6f;
         }
 
         Context.BarbedHook.onTick();
