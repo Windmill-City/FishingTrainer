@@ -1,6 +1,6 @@
 # Fishing Trainer
 
-This mod provides a fishing training mechanism.
+Provide a fishing game simulator, where you can exercise without failure.
 
 ## Install
 
