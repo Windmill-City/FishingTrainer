@@ -55,6 +55,11 @@ public class FishItem
     {
         Internal.drawInMenu(b, position, scale);
     }
+
+    public override bool Equals(object? obj)
+    {
+        return (obj as FishItem)?.ItemId == ItemId;
+    }
 }
 
 public static class FishItems

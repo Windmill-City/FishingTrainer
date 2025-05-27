@@ -27,11 +27,13 @@ public class UiFishSelector : Widget
 
     public UiFishSelector()
     {
+        Width = 0;
+        Height = RowHeight * 15;
+
         Fishes = FishItems.GetFishItems();
         ActiveFish = FishItems.GetPreviousFishItem();
 
-        Width = 0;
-        Height = RowHeight * 15;
+        ScrollPos = Fishes.IndexOf(ActiveFish) - 7;
 
         // layout
         foreach (var fish in Fishes)
@@ -53,7 +55,8 @@ public class UiFishSelector : Widget
 
             int deltaX = 48;
             // DisplayName
-            deltaX += Text(b, X_Offset + deltaX, Y_Offset, fish.DisplayName, fish.isBossFish ? Color.OrangeRed : Color.Black);
+            var nameColor = fish == ActiveFish ? Color.DarkGreen : (fish.isBossFish ? Color.OrangeRed : Color.Black);
+            deltaX += Text(b, X_Offset + deltaX, Y_Offset, fish.DisplayName, nameColor);
             // Difficulty
             deltaX += Text(b, X_Offset + deltaX, Y_Offset, $"({fish.Difficulty})", Color.DarkMagenta);
             // MotionType
