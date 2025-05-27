@@ -60,6 +60,11 @@ public class FishItem
     {
         return (obj as FishItem)?.ItemId == ItemId;
     }
+
+    public override int GetHashCode()
+    {
+        return ItemId.GetHashCode();
+    }
 }
 
 public static class FishItems
