@@ -55,7 +55,7 @@ public class UiFishSelector : Widget
 
             int deltaX = 48;
             // DisplayName
-            var nameColor = fish == ActiveFish ? Color.DarkGreen : (fish.isBossFish ? Color.OrangeRed : Color.Black);
+            var nameColor = fish.Equals(ActiveFish) ? Color.DarkGreen : (fish.isBossFish ? Color.OrangeRed : Color.Black);
             deltaX += Text(b, X_Offset + deltaX, Y_Offset, fish.DisplayName, nameColor);
             // Difficulty
             deltaX += Text(b, X_Offset + deltaX, Y_Offset, $"({fish.Difficulty})", Color.DarkMagenta);
