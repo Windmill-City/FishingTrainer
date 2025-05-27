@@ -41,7 +41,7 @@ public class BobberBar
             height += ModEntry.Config.CorkBobber * 24;
             // Deluxe Bait
             height += ModEntry.Config.hasDeluxeBait ? 12 : 0;
-            return height;
+            return Math.Clamp(height, 0, PositionMax);
         }
     }
 

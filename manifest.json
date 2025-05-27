@@ -1,7 +1,7 @@
 {
   "Name": "Fishing Trainer",
   "Author": "Windmill_City",
-  "Version": "1.0.4",
+  "Version": "1.0.5",
   "Description": "A mod to help enhance your fishing skill.",
   "UniqueID": "Windmill_City.FishingTrainer",
   "EntryDll": "FishingTrainer.dll",
