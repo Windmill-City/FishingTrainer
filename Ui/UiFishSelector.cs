@@ -73,7 +73,7 @@ public class UiFishSelector : Widget
 
         if (Input.GetState(SButton.MouseLeft) == SButtonState.Pressed)
         {
-            var Cursor = Input.GetCursorPosition().ScreenPixels;
+            var Cursor = Input.GetCursorPosition().GetScaledScreenPixels();
 
             // is in selector area?
             if (Cursor.X >= X && Cursor.Y >= Y && Cursor.X <= X + Width && Cursor.Y <= Y + Height)

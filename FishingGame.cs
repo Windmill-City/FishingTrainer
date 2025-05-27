@@ -39,7 +39,7 @@ public class FishingGame : IClickableMenu
                 var X_BB = xPositionOnScreen + 64;
                 var Y_BB = yPositionOnScreen + 32;
 
-                var Cursor = Input.GetCursorPosition().ScreenPixels;
+                var Cursor = Input.GetCursorPosition().GetScaledScreenPixels();
 
                 // in BobberBar Area?
                 return Cursor.X >= X_BB && Cursor.X <= X_BB + 38 * 4
