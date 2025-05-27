@@ -55,6 +55,6 @@
   "ExBobberBar.Perfect": "完美",
 
   "ExBobberBar.Chance.Veer": "变向几率：{{ chance }}",
-  "ExBobberBar.Chance.Dart": "冲刺几率：{{ chance }}",
-  "ExBobberBar.Chance.QuickDart": "猛冲几率：{{ chance }}"
+  "ExBobberBar.Chance.Dart": "猛冲几率：{{ chance }}",
+  "ExBobberBar.Chance.QuickDart": "冲刺几率：{{ chance }}"
 }
