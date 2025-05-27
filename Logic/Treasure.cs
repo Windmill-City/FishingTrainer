@@ -60,7 +60,6 @@ public class Treasure
     public Treasure(FishingGame game)
     {
         Context = game;
-        Reset();
     }
 
     public void Reset()

@@ -111,6 +111,7 @@ public class FishingGame : IClickableMenu
         // Hide HUD
         Game1.displayHUD = false;
 
+        Reset();
         Reposition();
     }
 

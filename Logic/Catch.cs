@@ -48,7 +48,6 @@ public class Catch
     public Catch(FishingGame game)
     {
         Context = game;
-        Reset();
     }
 
     public void Reset()

@@ -168,7 +168,6 @@ public class Bobber
     public Bobber(FishingGame Bar)
     {
         Context = Bar;
-        Reset();
     }
 
     public void Reset()

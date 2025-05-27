@@ -15,7 +15,6 @@ public class Fish
     {
         Context = game;
         Item = FishItems.GetPreviousFishItem();
-        Reset();
     }
 
     public void Reset()

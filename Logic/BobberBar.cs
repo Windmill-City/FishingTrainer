@@ -12,6 +12,8 @@ public class BobberBar
 
     public FishingGame Context;
 
+    public bool PrvInBar;
+
     public float Velocity;
     public float Acceleration;
 
@@ -46,13 +48,13 @@ public class BobberBar
     public BobberBar(FishingGame game)
     {
         Context = game;
-        Reset();
     }
 
     public void Reset()
     {
         Velocity = Acceleration = 0;
         _position = PositionMax - Height;
+        PrvInBar = Context.BobberInBar || Context.TreasureInBar;
     }
 
     public void onTick()
@@ -75,15 +77,16 @@ public class BobberBar
         Velocity += Acceleration;
 
         var prvPosition = Position;
-        var prvInBar = Context.BobberInBar || Context.TreasureInBar;
 
         Position += Velocity;
 
+        var InBar = Context.BobberInBar || Context.TreasureInBar;
         // just leave
-        if (prvInBar && !(Context.BobberInBar || Context.TreasureInBar))
+        if (PrvInBar && !InBar)
         {
             Game1.playSound("tinyWhip");
         }
+        PrvInBar = InBar;
 
         var justHitTop = AtTop && prvPosition - _position > 0;
         var justHitBottom = AtBottom && prvPosition - _position < 0;
