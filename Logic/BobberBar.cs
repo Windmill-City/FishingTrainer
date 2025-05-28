@@ -89,12 +89,11 @@ public class BobberBar
         PrvInBar = InBar;
 
         var justHitTop = AtTop && prvPosition - _position > 0;
-        var justHitBottom = AtBottom && prvPosition - _position < 0;
+        var justHitBottom = AtBottom && prvPosition - _position < -0.05; // fix bar glitch
 
         if (justHitTop || justHitBottom)
         {
-            // fix bar glitch when hit bottom
-            Velocity = Math.Abs(Velocity) < 1 ? 0 : (-Velocity * 2f / 3f);
+            Velocity = -Velocity * 2f / 3f;
             Game1.playSound("shiny4");
         }
 
@@ -102,5 +101,8 @@ public class BobberBar
         {
             Velocity *= ModEntry.Config.LeadBobber * 0.1f;
         }
+
+        // zero velocity when at bottom
+        if (!Context.isPressed && AtBottom && !justHitBottom) Velocity = 0;
     }
 }

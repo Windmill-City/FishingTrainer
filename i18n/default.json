@@ -47,6 +47,9 @@
   "MotionType.Floater": "Floater",
   "MotionType.Sinker": "Sinker",
 
+  "ExBobberBar.Velocity": "Velocity: {{ value }}",
+  "ExBobberBar.Acceleration": "Acceleration: {{ value}}",
+
   "ExBobberBar.Paused": "Paused",
   "ExBobberBar.Running": "Running",
 

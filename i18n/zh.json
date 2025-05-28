@@ -47,6 +47,9 @@
   "MotionType.Floater": "漂浮型",
   "MotionType.Sinker": "下坠型",
 
+  "ExBobberBar.Velocity": "速度: {{ value }}",
+  "ExBobberBar.Acceleration": "加速度: {{ value}}",
+
   "ExBobberBar.Paused": "已暂停",
   "ExBobberBar.Running": "运行中",
 

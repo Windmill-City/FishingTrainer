@@ -329,7 +329,15 @@ public class FishingGame : IClickableMenu
 
         // Status
         b.DrawString(Game1.dialogueFont, !isPaused ? I18n.ExBobberBar_Running() : I18n.ExBobberBar_Paused(), new Vector2(X_Info, Y_Info), !isPaused ? Color.DarkGreen : Color.DarkRed);
-        Y_Info += 40 * 3;
+        Y_Info += 40;
+
+        // Velocity
+        b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Velocity(BobberBar.Velocity), new Vector2(X_Info, Y_Info), !isPaused ? Color.DarkGreen : Color.DarkRed);
+        Y_Info += 40;
+
+        // Acceleration
+        b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Acceleration(BobberBar.Acceleration), new Vector2(X_Info, Y_Info), !isPaused ? Color.DarkGreen : Color.DarkRed);
+        Y_Info += 40;
 
         // Chance Veer
         b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Chance_Veer($"{Bobber.ChanceVeer:P}"), new Vector2(X_Info, Y_Info), Color.Black);
