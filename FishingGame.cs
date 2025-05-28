@@ -308,10 +308,12 @@ public class FishingGame : IClickableMenu
         Y_Info += 128;
 
         // Fish Display Name
+        string nameString;
         if (ModEntry.Config.ShowDebugHints)
-            b.DrawString(Game1.dialogueFont, $"{Fish.Item.DisplayName}({Fish.Item.ItemId})", new Vector2(X_Info, Y_Info), Fish.Item.isBossFish ? Color.OrangeRed : Color.Black);
+            nameString = $"{Fish.Item.DisplayName}({truncate(Fish.Item.ItemId, 20)})";
         else
-            b.DrawString(Game1.dialogueFont, Fish.Item.DisplayName, new Vector2(X_Info, Y_Info), Fish.Item.isBossFish ? Color.OrangeRed : Color.Black);
+            nameString = Fish.Item.DisplayName;
+        b.DrawString(Game1.dialogueFont, nameString, new Vector2(X_Info, Y_Info), Fish.Item.isBossFish ? Color.OrangeRed : Color.Black);
         Y_Info += 40;
         // Fish Motion Type
         b.DrawString(Game1.dialogueFont, Fish.Item.Type.asString(), new Vector2(X_Info, Y_Info), Color.DarkBlue);
@@ -351,5 +353,10 @@ public class FishingGame : IClickableMenu
         b.DrawString(Game1.dialogueFont, I18n.ExBobberBar_Chance_QuickDart($"{Bobber.ChanceQuickDart:P}"), new Vector2(X_Info, Y_Info), Color.Black);
 
         drawMouse(b);
+    }
+
+    public string truncate(string str, int maxLength)
+    {
+        return str.Length > maxLength ? "..." + str.Substring(str.Length - maxLength) : str;
     }
 }
