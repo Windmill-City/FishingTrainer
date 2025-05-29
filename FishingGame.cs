@@ -387,6 +387,6 @@ public class FishingGame : IClickableMenu
 
     public string truncate(string str, int maxLength)
     {
-        return str.Length > maxLength ? "..." + str.Substring(str.Length - maxLength) : str;
+        return str.Length > maxLength ? str.Substring(0, maxLength) + "..." : str;
     }
 }
