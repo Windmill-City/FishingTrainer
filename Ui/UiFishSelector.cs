@@ -3,6 +3,7 @@ using Force.DeepCloner;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
+using StardewValley;
 
 public class UiFishSelector : Widget
 {
@@ -38,7 +39,7 @@ public class UiFishSelector : Widget
         // layout
         foreach (var fish in Fishes)
         {
-            Width = Math.Max(deltaX($"{fish.DisplayName}({fish.Difficulty}){fish.Type.asString()}"), Width);
+            Width = Math.Max(deltaX(Game1.smallFont, $"{fish.DisplayName}({fish.Difficulty}){fish.Type.asString()}"), Width);
         }
         Width += 48; // icon
         Width += 32; // padding
@@ -56,11 +57,11 @@ public class UiFishSelector : Widget
             int deltaX = 48;
             // DisplayName
             var nameColor = fish.Equals(ActiveFish) ? Color.Green : (fish.isBossFish ? Color.OrangeRed : Color.Black);
-            deltaX += Text(b, X_Offset + deltaX, Y_Offset, fish.DisplayName, nameColor);
+            deltaX += Text(b, Game1.smallFont, X_Offset + deltaX, Y_Offset, fish.DisplayName, nameColor);
             // Difficulty
-            deltaX += Text(b, X_Offset + deltaX, Y_Offset, $"({fish.Difficulty})", Color.DarkMagenta);
+            deltaX += Text(b, Game1.smallFont, X_Offset + deltaX, Y_Offset, $"({fish.Difficulty})", Color.DarkMagenta);
             // MotionType
-            Text(b, X_Offset + deltaX, Y_Offset, fish.Type.asString(), Color.DarkBlue);
+            Text(b, Game1.smallFont, X_Offset + deltaX, Y_Offset, fish.Type.asString(), Color.DarkBlue);
 
             Y_Offset += RowHeight;
             if (Y_Offset + RowHeight > Y + Height) break;

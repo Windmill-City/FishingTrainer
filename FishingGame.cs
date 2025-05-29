@@ -27,6 +27,29 @@ public class FishingGame : IClickableMenu
     public Treasure Treasure;
     public BarbedHook BarbedHook;
 
+    public bool isNameClicked
+    {
+        get
+        {
+            if (!ModEntry.Config.ShowDebugHints) return false;
+
+            var Input = ModEntry.Instance!.Helper.Input;
+
+            if (Input.GetState(SButton.MouseLeft) == SButtonState.Pressed)
+            {
+                var X_Name = xPositionOnScreen + 256 - 16;
+                var Y_Name = yPositionOnScreen + 32 + 128;
+
+                var Cursor = Input.GetCursorPosition().GetScaledScreenPixels();
+                var idWidth = Widget.deltaX(Game1.dialogueFont, $"{Fish.Item.DisplayName}({truncate(Fish.Item.ItemId, 20)})");
+
+                return Cursor.X >= X_Name && Cursor.Y >= Y_Name
+                    && Cursor.X <= X_Name + idWidth && Cursor.Y <= Y_Name + 40;
+            }
+            return false;
+        }
+    }
+
     public bool isPressed
     {
         get
@@ -178,6 +201,13 @@ public class FishingGame : IClickableMenu
         if (ModEntry.Config.ResetFishingGame.JustPressed())
         {
             Reset();
+        }
+
+        // Check if name clicked
+        if (isNameClicked)
+        {
+            DesktopClipboard.SetText(Fish.Item.ItemId);
+            Log.Info($"Fish ItemId: {Fish.Item.ItemId} has copied.");
         }
 
         // if TimeToPauseOnNoAction is zero, then disable the pause function

@@ -55,14 +55,14 @@ public abstract class Widget
         b.Draw(Game1.staminaRect, new Rectangle(x, y, width, height), color);
     }
 
-    public static int Text(SpriteBatch b, float x, float y, string text, Color color)
+    public static int Text(SpriteBatch b, SpriteFont font, float x, float y, string text, Color color)
     {
-        b.DrawString(Game1.smallFont, text, new Vector2(x, y), color);
-        return deltaX(text);
+        b.DrawString(font, text, new Vector2(x, y), color);
+        return deltaX(font, text);
     }
 
-    public static int deltaX(string text)
+    public static int deltaX(SpriteFont font, string text)
     {
-        return (int)Math.Ceiling(Game1.smallFont.MeasureString(text).X);
+        return (int)Math.Ceiling(font.MeasureString(text).X);
     }
 }
